@@ -6,9 +6,9 @@ const preloader = document.querySelector("[data-preloader]");
 const nav = document.querySelector("[data-nav]");
 const navToggle = document.querySelector("[data-nav-toggle]");
 const panel = document.querySelector("[data-access-panel]");
-const panelToggle = document.querySelector("[data-panel-toggle]");
+const panelToggles = Array.from(document.querySelectorAll("[data-panel-toggle]"));
 const panelClose = document.querySelector("[data-panel-close]");
-const themeToggle = document.querySelector("[data-theme-toggle]");
+const themeToggles = Array.from(document.querySelectorAll("[data-theme-toggle]"));
 const greeting = document.querySelector("[data-greeting]");
 const form = document.querySelector("[data-contact-form]");
 const overlay = document.querySelector("[data-message-overlay]");
@@ -37,6 +37,7 @@ document.querySelectorAll("[data-skip-intro]").forEach((link) => {
 // Ensure nav is hidden to assistive tech by default unless purposely opened
 if (nav && !nav.classList.contains('is-open')) {
     nav.setAttribute('aria-hidden', 'true');
+    nav.hidden = true;
 }
 
 function dismissIntro() {
@@ -95,14 +96,31 @@ function savePreference(name, value) {
 // Apply saved preferences (or sensible defaults) even before cookie consent UI.
 applySavedPreferences();
 
+// Ensure the page starts at the top instead of restoring a deep scroll position.
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+const scrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+scrollToTop();
+window.addEventListener('load', () => {
+    requestAnimationFrame(scrollToTop);
+    setTimeout(scrollToTop, 0);
+});
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        requestAnimationFrame(scrollToTop);
+    }
+});
+
 // Update theme toggle icon to reflect current theme
 function updateThemeIcon() {
-    if (!themeToggle) return;
-    if (body.classList.contains('dark')) {
-        themeToggle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/></svg>';
-    } else {
-        themeToggle.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>';
-    }
+    if (!themeToggles.length) return;
+    const icon = body.classList.contains('dark')
+        ? '<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/></svg>'
+        : '<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>';
+    themeToggles.forEach((button) => {
+        button.innerHTML = icon;
+    });
 }
 updateThemeIcon();
 
@@ -145,15 +163,56 @@ setInterval(() => {
     greeting.textContent = greetings[greetingIndex];
 }, 2400);
 
-themeToggle?.addEventListener("click", () => {
-    body.classList.toggle("dark");
-    savePreference("portfolio_theme", body.classList.contains("dark") ? "dark" : "light");
-    updateThemeIcon();
+themeToggles.forEach((button) => {
+    button.addEventListener("click", () => {
+        body.classList.toggle("dark");
+        savePreference("portfolio_theme", body.classList.contains("dark") ? "dark" : "light");
+        updateThemeIcon();
+    });
 });
 
 const navBack = document.querySelector('[data-nav-back]');
 let _lastFocusedBeforeNav = null;
 let _navKeyHandler = null;
+let _navHideTimer = null;
+const navLinks = Array.from(document.querySelectorAll('[data-nav-link], [data-nav-home]'));
+const trackedSections = Array.from(['home', 'projects', 'security', 'about', 'contact']
+    .map((id) => document.getElementById(id))
+    .filter(Boolean));
+
+function setActiveNav(sectionId) {
+    if (!navLinks.length) return;
+    navLinks.forEach((link) => {
+        const isActive = link.getAttribute('href') === `#${sectionId}`;
+        link.classList.toggle('is-active', isActive);
+        if (isActive) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+    });
+}
+
+setActiveNav(location.hash.replace('#', '') || 'home');
+
+if (trackedSections.length) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+        let visibleSection = null;
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                visibleSection = entry.target.id;
+            }
+        });
+        if (visibleSection) setActiveNav(visibleSection);
+    }, {
+        rootMargin: '-35% 0px -55% 0px',
+        threshold: 0.01,
+    });
+
+    trackedSections.forEach((section) => sectionObserver.observe(section));
+
+    window.addEventListener('hashchange', () => {
+        const id = location.hash.replace('#', '') || 'home';
+        setActiveNav(id);
+    });
+}
 
 function getFocusable(container) {
     if (!container) return [];
@@ -163,7 +222,12 @@ function getFocusable(container) {
 
 function openNav() {
     if (!nav) return;
+    if (_navHideTimer) {
+        clearTimeout(_navHideTimer);
+        _navHideTimer = null;
+    }
     _lastFocusedBeforeNav = document.activeElement;
+    nav.hidden = false;
     nav.classList.add('is-open');
     nav.setAttribute('aria-hidden', 'false');
     navToggle.classList.add('is-open');
@@ -201,6 +265,12 @@ function closeNav(returnFocus = true) {
         document.removeEventListener('keydown', _navKeyHandler);
         _navKeyHandler = null;
     }
+    if (_navHideTimer) clearTimeout(_navHideTimer);
+    _navHideTimer = window.setTimeout(() => {
+        if (!nav.classList.contains('is-open')) {
+            nav.hidden = true;
+        }
+    }, 340);
     if (returnFocus && _lastFocusedBeforeNav && typeof _lastFocusedBeforeNav.focus === 'function') {
         _lastFocusedBeforeNav.focus();
     }
@@ -223,11 +293,14 @@ nav?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => closeNav(true));
 });
 
-panelToggle?.addEventListener("click", () => {
-    panel?.classList.toggle("is-open");
-    nav?.classList.remove("is-open");
-    navToggle?.classList.remove("is-open");
-    navToggle?.setAttribute("aria-expanded", "false");
+panelToggles.forEach((button) => {
+    button.addEventListener("click", () => {
+        panel?.classList.toggle("is-open");
+        nav?.classList.remove("is-open");
+        navToggle?.classList.remove("is-open");
+        navToggle?.setAttribute("aria-expanded", "false");
+        if (nav) nav.hidden = true;
+    });
 });
 
 panelClose?.addEventListener("click", () => panel?.classList.remove("is-open"));
