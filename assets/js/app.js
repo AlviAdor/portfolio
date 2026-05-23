@@ -151,23 +151,76 @@ themeToggle?.addEventListener("click", () => {
     updateThemeIcon();
 });
 
-navToggle?.addEventListener("click", () => {
-    const isOpen = nav?.classList.toggle("is-open") ?? false;
-    navToggle.classList.toggle("is-open", isOpen);
-    navToggle.setAttribute("aria-expanded", String(isOpen));
-    // reflect visibility for assistive tech
-    if (nav) nav.setAttribute("aria-hidden", String(!isOpen));
-    navToggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
-    panel?.classList.remove("is-open");
+const navBack = document.querySelector('[data-nav-back]');
+let _lastFocusedBeforeNav = null;
+let _navKeyHandler = null;
+
+function getFocusable(container) {
+    if (!container) return [];
+    const selectors = 'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    return Array.from(container.querySelectorAll(selectors)).filter((el) => el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+}
+
+function openNav() {
+    if (!nav) return;
+    _lastFocusedBeforeNav = document.activeElement;
+    nav.classList.add('is-open');
+    nav.setAttribute('aria-hidden', 'false');
+    navToggle.classList.add('is-open');
+    navToggle.setAttribute('aria-expanded', 'true');
+    navToggle.setAttribute('aria-label', 'Close navigation');
+    panel?.classList.remove('is-open');
+
+    const focusables = getFocusable(nav);
+    if (focusables.length) focusables[0].focus();
+
+    _navKeyHandler = function(e) {
+        if (e.key === 'Tab') {
+            const f = getFocusable(nav);
+            if (f.length === 0) { e.preventDefault(); return; }
+            const first = f[0];
+            const last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+        if (e.key === 'Escape') {
+            closeNav(true);
+        }
+    };
+    document.addEventListener('keydown', _navKeyHandler);
+}
+
+function closeNav(returnFocus = true) {
+    if (!nav) return;
+    nav.classList.remove('is-open');
+    nav.setAttribute('aria-hidden', 'true');
+    navToggle.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', 'Open navigation');
+    if (_navKeyHandler) {
+        document.removeEventListener('keydown', _navKeyHandler);
+        _navKeyHandler = null;
+    }
+    if (returnFocus && _lastFocusedBeforeNav && typeof _lastFocusedBeforeNav.focus === 'function') {
+        _lastFocusedBeforeNav.focus();
+    }
+    _lastFocusedBeforeNav = null;
+}
+
+navToggle?.addEventListener('click', () => {
+    if (nav?.classList.contains('is-open')) closeNav(true);
+    else openNav();
 });
 
-nav?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-        nav.classList.remove("is-open");
-        navToggle?.classList.remove("is-open");
-        navToggle?.setAttribute("aria-expanded", "false");
-        if (nav) nav.setAttribute("aria-hidden", "true");
-    });
+// Close when clicking the backdrop area (nav element itself)
+nav?.addEventListener('click', (e) => {
+    if (e.target === nav) closeNav(true);
+});
+
+navBack?.addEventListener('click', () => closeNav(true));
+
+nav?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => closeNav(true));
 });
 
 panelToggle?.addEventListener("click", () => {
