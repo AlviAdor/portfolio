@@ -351,4 +351,88 @@ h3 {
     flex-shrink: 0;
 }
 
+/* Mobile sidebar (full-width slide-in) */
+.side-nav {
+    position: fixed;
+    inset: 0 0 0 0;
+    z-index: 98;
+    display: grid;
+    grid-auto-rows: min-content;
+    align-content: start;
+    padding: 96px 20px 40px 20px; /* leave space for topbar */
+    background: var(--surface);
+    transform: translateX(-100%);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 320ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease, visibility 220ms ease;
+}
+
+.side-nav.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* dim backdrop handled via ::before so nav remains focusable */
+.side-nav::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 0 0;
+    background: rgba(0,0,0,0.36);
+    opacity: 0;
+    transition: opacity 260ms ease;
+    pointer-events: none;
+    z-index: 96;
+}
+.side-nav.is-open::before { opacity: 1; pointer-events: auto; }
+
+.side-nav a {
+    display: block;
+    padding: 14px 8px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+}
+
+/* Menu button visual state */
+.menu-button { display: inline-grid; gap:6px; align-items:center; justify-items:center; width:44px; height:44px; padding:8px; border-radius:10px; border:1px solid var(--line); background: color-mix(in srgb, var(--surface) 92%, transparent); }
+.menu-button span { display:block; width:18px; height:2px; background: currentColor; border-radius:2px; }
+.menu-button.is-open { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
+
+/* Accessibility panel hidden by default, revealed with .is-open */
+.access-panel {
+    position: fixed;
+    right: 16px;
+    top: 78px;
+    z-index: 99;
+    width: 300px;
+    max-width: calc(100% - 32px);
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transform: translateY(-8px) scale(.995);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 240ms ease, transform 220ms cubic-bezier(.2,.9,.2,1), visibility 220ms ease;
+}
+.access-panel.is-open { transform: none; opacity: 1; visibility: visible; pointer-events: auto; }
+
+/* Desktop: hide mobile nav, show desktop nav */
+@media (min-width: 880px) {
+    .side-nav { display: none !important; }
+    .menu-button { display: none; }
+}
+
+/* Small screens: ensure desktop nav hidden */
+@media (max-width: 879px) {
+    .desktop-nav { display: none; }
+}
+
 /* (rest of the stylesheet continues unchanged) */
