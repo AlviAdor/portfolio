@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
+    <title>Validation | Alvi Ador</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="intro-overlay" data-intro>
+        <div class="intro-content">
+            <div class="intro-mark">
+                <svg width="64" height="64" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="g-intro" x1="0" x2="1">
+                            <stop offset="0" stop-color="#77e6c8"/>
+                            <stop offset="1" stop-color="#9b8cff"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="44" height="44" rx="10" fill="url(#g-intro)"/>
+                    <text x="50%" y="55%" text-anchor="middle" font-family="Segoe UI, Roboto, Arial" font-weight="900" font-size="16" fill="#f5f7f4">AA</text>
+                </svg>
+            </div>
+            <h1 class="intro-greeting" data-intro-greeting>Greetings</h1>
+            <p class="intro-subtitle">Alvi Ador | CSE Student & Secure Web Developer</p>
+        </div>
+    </div>
+
+    <div class="preloader" data-preloader>
+        <div class="loader-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <header class="topbar" aria-label="Site controls">
+        <div class="brand-wrap">
+            <a class="logo brand-logo" href="index.html" aria-label="Alvi Ador portfolio" data-home-link>
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3 11.5L12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 10.8V20h14v-9.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 20v-5h4v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+            <a href="index.html#projects">Projects</a>
+            <a href="index.html#security">Security</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+        <div class="header-social">
+            <a class="icon-link" href="https://github.com/AlviAdor" target="_blank" rel="noreferrer" aria-label="GitHub">
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.286-.01-1-.015-1.96-3.338.727-4.042-1.612-4.042-1.612-.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.083-.73.083-.73 1.205.084 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.605-2.665-.305-5.466-1.335-5.466-5.93 0-1.31.467-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 016 0c2.295-1.552 3.3-1.23 3.3-1.23.645 1.653.24 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.805 5.625-5.475 5.92.429.37.81 1.096.81 2.21 0 1.595-.015 2.877-.015 3.27 0 .315.21.693.825.576C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg>
+            </a>
+            <a class="icon-link" href="https://www.linkedin.com/in/alviador/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8h4.48V24H.24zM8.24 8h4.3v2.13h.06c.6-1.14 2.06-2.34 4.23-2.34C22.05 7.79 24 10.03 24 14.08V24h-4.48v-8.01c0-1.91-.04-4.37-2.66-4.37-2.66 0-3.07 2.08-3.07 4.23V24H8.24V8z" fill="currentColor"/></svg>
+            </a>
+        </div>
+        <div class="topbar-actions">
+            <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="icon-button" type="button" data-panel-toggle aria-label="Open accessibility panel">
+                <span class="icon-dots" aria-hidden="true"></span>
+            </button>
+            <button class="menu-button" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="side-nav" id="site-nav" aria-label="Mobile navigation" data-nav>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#security">Security</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
+
+    <aside class="access-panel" data-access-panel aria-label="Accessibility settings">
+        <div class="panel-header">
+            <strong>Display</strong>
+            <button type="button" data-panel-close>Close</button>
+        </div>
+        <label>
+            <input type="checkbox" data-readable-font>
+            Readable font
+        </label>
+        <label>
+            <input type="checkbox" data-reduced-motion>
+            Reduced motion
+        </label>
+        <label>
+            <input type="checkbox" data-high-contrast>
+            High contrast
+        </label>
+        <label>
+            Text size
+            <input type="range" min="0" max="2" value="0" step="1" data-text-size>
+        </label>
+        <button class="reset-button" type="button" data-reset-access>Reset</button>
+    </aside>
+
+    <main>
+        <section class="detail-hero section-screen">
+            <div class="section-intro">
+                <p class="section-label">Security Focus</p>
+                <h1>Layered validation that blocks injection, XSS, and malformed data before it touches the database.</h1>
+                <p>Bad input is stopped at the browser, verified again on the server, and rejected entirely if it doesn't match the expected format. Nothing reaches your database unless I am certain it is safe.</p>
+            </div>
+        </section>
+
+        <section class="detail-grid section-screen">
+            <div class="section-intro">
+                <h2>Defense Strategy</h2>
+            </div>
+            <div class="security-grid">
+                <article>
+                    <span>Client-side</span>
+                    <h3>Instant feedback</h3>
+                    <p>Format, length, and type checks happen immediately before submission.</p>
+                </article>
+                <article>
+                    <span>Server-side</span>
+                    <h3>Fortress verification</h3>
+                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                </article>
+                <article>
+                    <span>Injection</span>
+                    <h3>Parameterized queries</h3>
+                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                </article>
+                <article>
+                    <span>XSS</span>
+                    <h3>Character escaping</h3>
+                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="about section-screen">
+            <div class="section-intro">
+                <h2>The Commitment</h2>
+            </div>
+            <div class="about-layout">
+                <div class="about-copy">
+                    <p>
+                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                    </p>
+                    <div class="about-actions">
+                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/app.js"></script>
+</body>
+</html>

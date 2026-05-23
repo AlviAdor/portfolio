@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Alvi Ador: Security-first developer building verified systems. Expert in secure PHP/MySQL, authentication, encryption, and modern web security practices.">
+    <title>Alvi Ador | Security-First Developer</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="intro-overlay" data-intro>
+        <div class="intro-content">
+            <div class="intro-mark">
+                <svg width="64" height="64" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="g-intro" x1="0" x2="1">
+                            <stop offset="0" stop-color="#77e6c8"/>
+                            <stop offset="1" stop-color="#9b8cff"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="44" height="44" rx="10" fill="url(#g-intro)"/>
+                    <text x="50%" y="55%" text-anchor="middle" font-family="Segoe UI, Roboto, Arial" font-weight="900" font-size="16" fill="#f5f7f4">AA</text>
+                </svg>
+            </div>
+            <h1 class="intro-greeting" data-intro-greeting>Greetings</h1>
+            <p class="intro-subtitle">Alvi Ador | CSE Student & Secure Web Developer</p>
+        </div>
+    </div>
+
+    <div class="preloader" data-preloader>
+        <div class="loader-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <header class="topbar" aria-label="Site controls">
+        <div class="brand-wrap">
+            <a class="logo brand-logo" href="index.html" aria-label="Alvi Ador portfolio" data-home-link>
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3 11.5L12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 10.8V20h14v-9.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 20v-5h4v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+        </div>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+            <a href="#projects">Projects</a>
+            <a href="#security">Security</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <div class="header-social">
+            <a class="icon-link" href="https://github.com/AlviAdor" target="_blank" rel="noreferrer" aria-label="GitHub">
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.286-.01-1-.015-1.96-3.338.727-4.042-1.612-4.042-1.612-.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.083-.73.083-.73 1.205.084 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.605-2.665-.305-5.466-1.335-5.466-5.93 0-1.31.467-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 016 0c2.295-1.552 3.3-1.23 3.3-1.23.645 1.653.24 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.805 5.625-5.475 5.92.429.37.81 1.096.81 2.21 0 1.595-.015 2.877-.015 3.27 0 .315.21.693.825.576C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg>
+            </a>
+            <a class="icon-link" href="https://www.linkedin.com/in/alviador/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8h4.48V24H.24zM8.24 8h4.3v2.13h.06c.6-1.14 2.06-2.34 4.23-2.34C22.05 7.79 24 10.03 24 14.08V24h-4.48v-8.01c0-1.91-.04-4.37-2.66-4.37-2.66 0-3.07 2.08-3.07 4.23V24H8.24V8z" fill="currentColor"/></svg>
+            </a>
+        </div>
+        <div class="topbar-actions">
+            <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="icon-button" type="button" data-panel-toggle aria-label="Open accessibility panel">
+                <span class="icon-dots" aria-hidden="true"></span>
+            </button>
+            <button class="menu-button" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="side-nav" id="site-nav" aria-label="Mobile navigation" data-nav>
+        <a href="#projects">Projects</a>
+        <a href="#security">Security</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <aside class="access-panel" data-access-panel aria-label="Accessibility settings">
+        <div class="panel-header">
+            <strong>Display</strong>
+            <button type="button" data-panel-close>Close</button>
+        </div>
+        <label>
+            <input type="checkbox" data-readable-font>
+            Readable font
+        </label>
+        <label>
+            <input type="checkbox" data-reduced-motion>
+            Reduced motion
+        </label>
+        <label>
+            <input type="checkbox" data-high-contrast>
+            High contrast
+        </label>
+        <label>
+            Text size
+            <input type="range" min="0" max="2" value="0" step="1" data-text-size>
+        </label>
+        <button class="reset-button" type="button" data-reset-access>Reset</button>
+    </aside>
+
+    <main>
+        <section class="hero section-screen" id="home" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="greeting" data-greeting>Greetings</p>
+                <h1 id="hero-title">I am <span>Alvi Ador</span>, an early-career cybersecurity enthusiast and full-stack developer.</h1>
+                <p class="hero-subtitle">
+                    I'm focused on security—threat modeling, cryptography, and hardening systems—while building PHP backends and modern frontends. As a fresher I'm open to roles across security and software: eager to learn, collaborate, and ship production-ready features with secure defaults.
+                </p>
+                <div class="hero-actions">
+                    <a class="button primary" href="#projects">View Projects</a>
+                    <button class="button secondary" type="button" data-contact-scroll>Contact Me</button>
+                </div>
+                <!-- Profile links moved into header logo popover for a cleaner brand mark -->
+            </div>
+
+            <figure class="hero-visual">
+                <img src="assets/visuals/cyber-console.png" alt="Cybersecurity dashboard with terminal panels and secure system visuals">
+            </figure>
+        </section>
+
+        <section class="signal-strip" aria-label="Portfolio highlights">
+            <div>
+                <strong>Cybersecurity Enthusiast</strong>
+                <span>Encryption, validation, threat modeling, and audit logging—actively learning and applying best practices.</span>
+            </div>
+            <div>
+                <strong>Early-Career Full-Stack</strong>
+                <span>PHP, MySQL, JavaScript, Python, C#. Building end-to-end systems while sharpening secure coding habits.</span>
+            </div>
+            <div>
+                <strong>Security + Software</strong>
+                <span>I prioritize shipping secure, maintainable code from day one. Open to internships, junior roles, and collaborations.</span>
+            </div>
+        </section>
+
+        <section class="method section-band" aria-labelledby="method-title">
+            <div class="section-intro">
+                <p class="section-label">Method</p>
+                <h2 id="method-title">How I blend security curiosity with software engineering: threat-aware design, defensive coding, practical testing, and gradual hardening.</h2>
+            </div>
+            <div class="method-grid">
+                <article>
+                    <span>Plan</span>
+                    <p>Design threats before code. Map attack vectors, data flows, access controls, and compliance requirements upfront.</p>
+                </article>
+                <article>
+                    <span>Build</span>
+                    <p>Implement with verified libraries, parameterized queries, and encryption. Every input is questioned. Defaults are secure.</p>
+                </article>
+                <article>
+                    <span>Audit</span>
+                    <p>Testing for logic flaws, injection vulnerabilities, session hijacking, and side-channel attacks before deployment.</p>
+                </article>
+                <article>
+                    <span>Maintain</span>
+                    <p>Keep systems updated with security patches, monitor logs, rotate credentials, and respond to incidents quickly.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="projects section-screen" id="projects" aria-labelledby="projects-title">
+            <div class="section-intro">
+                <p class="section-label">Projects</p>
+                <h2 id="projects-title">Projects I build and learn from. Each one shows how secure development and practical software work together.</h2>
+            </div>
+
+            <article class="featured-project">
+                <div class="project-copy">
+                    <p class="project-kicker">Featured build</p>
+                    <h3>ANS Hospital Management System</h3>
+                    <p>
+                        A verifiable, role-based hospital system handling sensitive patient data. Built with session verification, 
+                        encrypted credentials, and rigorous input validation. MVC architecture ensures maintainability and compliance.
+                    </p>
+                    <ul>
+                        <li>Authentication & Authorization: Role-based staff access with session integrity checks</li>
+                        <li>Data Integrity: Patient records protected by normalized schema and parameterized queries</li>
+                        <li>Validation Layer: Server-side checks prevent injection, malformed input, and unauthorized updates</li>
+                    </ul>
+                    <div class="project-links">
+                        <a href="https://github.com/AlviAdor/WT_Fall-25-26-" target="_blank" rel="noreferrer">GitHub Repo</a>
+                        <a href="#gallery">Screenshots</a>
+                    </div>
+                </div>
+                <figure class="project-media">
+                    <img src="assets/screens/ans-hospital-banner.png" alt="ANS Hospital project banner">
+                </figure>
+            </article>
+
+            <div class="project-grid">
+                <article class="project-card">
+                    <figure>
+                        <img src="assets/screens/registration-visual.jpg" alt="Participant registration visual">
+                    </figure>
+                    <div>
+                        <span>HTML / CSS / JS</span>
+                        <h3>Verified Registration</h3>
+                        <p>Registration system with client-side validation feedback and server-side verification. Password strength enforced, email uniqueness verified.</p>
+                        <a href="https://github.com/AlviAdor/WT_Fall-25-26-" target="_blank" rel="noreferrer">View Repo</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure class="generated-preview">
+                        <span>DX</span>
+                    </figure>
+                    <div>
+                        <span>Python</span>
+                        <h3>DX-Ball</h3>
+                        <p>Arcade paddle game with Classic, Speed, and Zen modes, score tracking, lives, and customizable controls.</p>
+                        <a href="https://github.com/AlviAdor/DX-Ball" target="_blank" rel="noreferrer">View Repo</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure class="generated-preview shop">
+                        <span>MS</span>
+                    </figure>
+                    <div>
+                        <span>C#</span>
+                        <h3>Mobile Shop Management</h3>
+                        <p>Windows app for adding phones, managing customers, tracking stock, viewing records, and password-protected deletion.</p>
+                        <a href="https://github.com/AlviAdor/MobileShopManagementSystem" target="_blank" rel="noreferrer">View Repo</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="gallery section-band" id="gallery" aria-labelledby="gallery-title">
+            <div class="section-intro">
+                <p class="section-label">Architecture & Implementation</p>
+                <h2 id="gallery-title">Screenshots demonstrating system reliability, data integrity, and secure design.</h2>
+            </div>
+            <div class="screenshot-grid">
+                <figure>
+                    <img src="assets/screens/ans-hospital-banner.png" alt="ANS Hospital banner screenshot">
+                    <figcaption>ANS Hospital interface banner</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/screens/hospital-ui.jpg" alt="Hospital project interface image">
+                    <figcaption>Hospital project visual asset</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/screens/registration-visual.jpg" alt="Registration project visual">
+                    <figcaption>Registration form visual asset</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="security section-screen" id="security" aria-labelledby="security-title">
+            <div class="section-intro">
+                <p class="section-label">Security Mindset</p>
+                <h2 id="security-title">Security is part of the design, from the first form field to the final stored record, and from the UI to the code behind it.</h2>
+            </div>
+            <div class="security-grid">
+                <article>
+                    <span>01</span>
+                    <h3>Authentication</h3>
+                    <p>Human-only access with verification checks, session controls, and zero tolerance for automated breaches or unauthorized entry.</p>
+                    <a class="detail-link" href="security-authentication.html">Read more</a>
+                </article>
+                <article>
+                    <span>02</span>
+                    <h3>Validation</h3>
+                    <p>Layered input protection against injection, XSS attacks, and malformed data. Nothing reaches the database unverified.</p>
+                    <a class="detail-link" href="security-validation.html">Read more</a>
+                </article>
+                <article>
+                    <span>03</span>
+                    <h3>Data Integrity</h3>
+                    <p>Encrypted storage with strict schema design, recovery protocols, and absolute commitment to keeping your information safe.</p>
+                    <a class="detail-link" href="security-data-integrity.html">Read more</a>
+                </article>
+                <article>
+                    <span>04</span>
+                    <h3>Message Flow</h3>
+                    <p>Rate-limited submissions with human verification and secure logging. Every message is treated as a critical record.</p>
+                    <a class="detail-link" href="security-messaging.html">Read more</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="about section-screen" id="about" aria-labelledby="about-title">
+            <div class="section-intro">
+                <p class="section-label">About</p>
+                <h2 id="about-title">Early-career cybersecurity enthusiast and software developer. Eager to learn, ready to contribute.</h2>
+            </div>
+            <div class="about-layout">
+                <div class="about-copy">
+                    <p>
+                        I'm early in my career and focused on both security and software craftsmanship. Through coursework and hands-on projects I build full-stack apps and apply threat modeling, input validation, and basic cryptography. I bring curiosity, discipline, and an eagerness to improve with every release.
+                    </p>
+                    <p>
+                        I bridge theory and practice with defense-in-depth (encryption, parameterized queries, audit logging) and production habits (version control, testing, clear documentation). I'm open to internships, junior roles, and collaborations where I can learn fast and contribute real value.
+                    </p>
+                </div>
+                <div class="skill-cloud" aria-label="Skills and interests">
+                    <span>Cybersecurity</span>
+                    <span>PHP</span>
+                    <span>MySQL</span>
+                    <span>JavaScript</span>
+                    <span>HTML</span>
+                    <span>CSS</span>
+                    <span>C++</span>
+                    <span>Java</span>
+                    <span>Python</span>
+                    <span>C#</span>
+                    <span>Jupyter Notebook</span>
+                    <span>Git</span>
+                    <span>Validation</span>
+                    <span>Session Handling</span>
+                    <span>Responsive UI</span>
+                    <span>Clean Workflow</span>
+                    <span>Secure Thinking</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact section-screen" id="contact" aria-labelledby="contact-title">
+            <div class="section-intro">
+                <p class="section-label">Secure Contact</p>
+                <h2 id="contact-title">Reach out with complete confidence. Your message is encrypted, verified, and handled with absolute care.</h2>
+            </div>
+            <div class="contact-layout">
+                <form class="contact-form" data-contact-form novalidate>
+                    <label>
+                        Name
+                        <input type="text" name="name" autocomplete="name" placeholder="Your name">
+                        <span class="field-error" data-error-for="name"></span>
+                    </label>
+                    <label>
+                        Email
+                        <input type="email" name="email" autocomplete="email" placeholder="you@example.com">
+                        <span class="field-error" data-error-for="email"></span>
+                    </label>
+                    <label class="message-field">
+                        Message
+                        <textarea name="message" rows="6" placeholder="Tell me about your project or security concerns"></textarea>
+                        <span class="field-error" data-error-for="message"></span>
+                    </label>
+                    <button class="button primary" type="submit">Send Securely</button>
+                </form>
+                <aside class="contact-card">
+                    <p>Connect Safely</p>
+                    <div class="contact-logos" aria-label="Social profiles">
+                        <a class="contact-logo" href="https://github.com/AlviAdor" target="_blank" rel="noreferrer" aria-label="GitHub profile">
+                            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.286-.01-1-.015-1.96-3.338.727-4.042-1.612-4.042-1.612-.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.083-.73.083-.73 1.205.084 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.605-2.665-.305-5.466-1.335-5.466-5.93 0-1.31.467-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 016 0c2.295-1.552 3.3-1.23 3.3-1.23.645 1.653.24 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.805 5.625-5.475 5.92.429.37.81 1.096.81 2.21 0 1.595-.015 2.877-.015 3.27 0 .315.21.693.825.576C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg>
+                            <span>GitHub</span>
+                        </a>
+                        <a class="contact-logo" href="https://www.linkedin.com/in/alviador/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+                            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8h4.48V24H.24zM8.24 8h4.3v2.13h.06c.6-1.14 2.06-2.34 4.23-2.34C22.05 7.79 24 10.03 24 14.08V24h-4.48v-8.01c0-1.91-.04-4.37-2.66-4.37-2.66 0-3.07 2.08-3.07 4.23V24H8.24V8z"/></svg>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a class="contact-logo" href="mailto:sarker.faizal2537@gmail.com" aria-label="Email">
+                            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                            <span>Email</span>
+                        </a>
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </main>
+
+    <div class="message-overlay" data-message-overlay aria-live="polite">
+        <div class="message-box">
+            <strong>Message received and encrypted.</strong>
+            <p>Your message is safely stored. I'll respond personally and securely, very soon.</p>
+            <a class="button primary" data-mailto-link href="mailto:sarker.faizal2537@gmail.com">Open Email</a>
+            <button type="button" data-message-close>Close</button>
+        </div>
+    </div>
+
+    <section class="cookie-banner" data-cookie-banner aria-label="Cookie preferences">
+        <p>This site can save small preference cookies for theme and display settings.</p>
+        <div>
+            <button type="button" data-cookie-accept>Accept</button>
+            <button type="button" data-cookie-decline>Decline</button>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <p>© 2026 Alvi Ador. All rights reserved.</p>
+        <button type="button" data-cookie-manage>Manage cookies</button>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
