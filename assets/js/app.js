@@ -16,9 +16,33 @@ const messageClose = document.querySelector("[data-message-close]");
 const mailtoLink = document.querySelector("[data-mailto-link]");
 const cookieBanner = document.querySelector("[data-cookie-banner]");
 const homeLink = document.querySelector("[data-home-link]");
+const isHomePage = location.pathname.endsWith("index.html") || location.pathname.endsWith("/") || location.pathname === "";
+const introSeenKey = "portfolio_intro_seen";
+const consentKey = "portfolio_cookie_consent";
 
 const greetings = ["Greetings", "Hello", "Assalamu alaikum", "Hola", "Salut", "Ciao", "Merhaba", "Xin chao", "你好", "مرحبا", "Привет", "Bonjour"];
+const greetingAccents = ["#0f766e", "#5b6b7a", "#7c7f84", "#ecebe6", "#6b7280", "#81aefc", "#9b8cff"];
 let greetingIndex = 0;
+
+function safeStorageGet(storage, key) {
+    try {
+        return storage.getItem(key);
+    } catch (error) {
+        return null;
+    }
+}
+
+function safeStorageSet(storage, key, value) {
+    try {
+        storage.setItem(key, value);
+    } catch (error) {
+        return;
+    }
+}
+
+function setGreetingAccent(index) {
+    document.documentElement.style.setProperty("--greeting-accent", greetingAccents[index % greetingAccents.length]);
+}
 
 // Handle home button click to skip intro on return visits
 if (homeLink) {
@@ -58,19 +82,23 @@ function getCookie(name) {
 }
 
 function hasCookieConsent() {
-    return decodeURIComponent(getCookie("portfolio_cookie_consent") || "") === "accepted";
+    const consent = safeStorageGet(localStorage, "portfolio_cookie_consent") || decodeURIComponent(getCookie("portfolio_cookie_consent") || "");
+    return consent === "accepted";
 }
 
 function applySavedPreferences() {
-    const theme = decodeURIComponent(getCookie("portfolio_theme") || "");
-    const readable = decodeURIComponent(getCookie("portfolio_readable") || "");
-    const reduced = decodeURIComponent(getCookie("portfolio_reduced_motion") || "");
-    const contrast = decodeURIComponent(getCookie("portfolio_high_contrast") || "");
-    const scale = decodeURIComponent(getCookie("portfolio_text_scale") || "1");
+    const localTheme = safeStorageGet(localStorage, "portfolio_theme") || "";
+    const themeCookie = decodeURIComponent(getCookie("portfolio_theme") || "");
+    const hour = new Date().getHours();
+    const defaultTheme = hour >= 7 && hour < 18 ? "light" : "dark";
+    const theme = localTheme || themeCookie || defaultTheme;
+    const readable = safeStorageGet(localStorage, "portfolio_readable") || decodeURIComponent(getCookie("portfolio_readable") || "");
+    const reduced = safeStorageGet(localStorage, "portfolio_reduced_motion") || decodeURIComponent(getCookie("portfolio_reduced_motion") || "");
+    const contrast = safeStorageGet(localStorage, "portfolio_high_contrast") || decodeURIComponent(getCookie("portfolio_high_contrast") || "");
+    const scale = safeStorageGet(localStorage, "portfolio_text_scale") || decodeURIComponent(getCookie("portfolio_text_scale") || "1");
 
-    // Default to dark if no explicit theme saved. Respect saved 'light' preference.
-    if (theme === "dark") body.classList.add("dark");
-    else if (theme === "") body.classList.add("dark");
+    document.documentElement.dataset.theme = theme;
+    body.classList.toggle("dark", theme === "dark");
     if (readable === "true") body.classList.add("readable");
     if (reduced === "true") body.classList.add("reduce-motion");
     if (contrast === "true") body.classList.add("high-contrast");
@@ -88,6 +116,9 @@ function applySavedPreferences() {
 }
 
 function savePreference(name, value) {
+    if (name === "portfolio_theme" || name === "portfolio_readable" || name === "portfolio_reduced_motion" || name === "portfolio_high_contrast" || name === "portfolio_text_scale") {
+        safeStorageSet(localStorage, name, String(value));
+    }
     if (hasCookieConsent()) {
         setCookie(name, String(value), 180);
     }
@@ -124,20 +155,58 @@ function updateThemeIcon() {
 }
 updateThemeIcon();
 
-if (hasCookieConsent()) {
-    // preferences already applied and will persist as cookies where permitted
-} else if (decodeURIComponent(getCookie("portfolio_cookie_consent") || "") !== "declined") {
-    cookieBanner?.classList.add("is-open");
+const storedConsent = safeStorageGet(localStorage, consentKey) || decodeURIComponent(getCookie(consentKey) || "");
+
+function showCookieBanner() {
+    if (!cookieBanner) return;
+    cookieBanner.hidden = false;
+    cookieBanner.classList.add("is-open");
+}
+
+function hideCookieBanner() {
+    if (!cookieBanner) return;
+    cookieBanner.classList.remove("is-open");
+    cookieBanner.hidden = true;
+}
+
+if (storedConsent) {
+    hideCookieBanner();
+} else if (cookieBanner) {
+    cookieBanner.hidden = true;
 }
 
 // Show intro with animated greeting (only on initial page load, not on returns from other pages)
-if (introGreeting && !sessionStorage.getItem("skipIntro")) {
+const introSeen = safeStorageGet(localStorage, introSeenKey) === "true";
+if (intro && !isHomePage) {
+    intro.hidden = true;
+}
+
+if (introGreeting && isHomePage && !introSeen && !sessionStorage.getItem("skipIntro")) {
+    safeStorageSet(localStorage, introSeenKey, "true");
     introGreeting.textContent = greetings[greetingIndex];
+    setGreetingAccent(greetingIndex);
     setInterval(() => {
         if (!introGreeting) return;
         greetingIndex = (greetingIndex + 1) % greetings.length;
         introGreeting.textContent = greetings[greetingIndex];
+        setGreetingAccent(greetingIndex);
     }, 1800);
+} else if (intro) {
+    intro.classList.add("is-hidden");
+    intro.hidden = true;
+}
+
+if (!storedConsent) {
+    const promptDelay = intro && !intro.classList.contains('is-hidden') && isHomePage && !introSeen ? 4600 : 700;
+    setTimeout(() => {
+        if (!safeStorageGet(localStorage, consentKey)) {
+            showCookieBanner();
+        }
+    }, promptDelay);
+}
+
+if (greeting) {
+    setGreetingAccent(greetingIndex);
 }
 
 // Auto-dismiss intro and preloader after 5 seconds (or immediately if returning from another page)
@@ -161,6 +230,7 @@ setInterval(() => {
     if (!greeting) return;
     greetingIndex = (greetingIndex + 1) % greetings.length;
     greeting.textContent = greetings[greetingIndex];
+    setGreetingAccent(greetingIndex);
 }, 2400);
 
 themeToggles.forEach((button) => {
@@ -357,16 +427,19 @@ form?.addEventListener("submit", (event) => {
     setError("message", "");
 
     let valid = true;
-    if (name.length < 2) {
+    if (name.length < 2 || name.length > 60) {
         setError("name", "Please enter your name.");
+        form.elements.name?.focus();
         valid = false;
     }
-    if (!emailPattern.test(email)) {
+    if (!emailPattern.test(email) || email.length > 120) {
         setError("email", "Please enter a valid email.");
+        if (valid) form.elements.email?.focus();
         valid = false;
     }
-    if (!message) {
-        setError("message", "Message field is empty.");
+    if (message.length < 10 || message.length > 1000) {
+        setError("message", "Please enter at least 10 characters.");
+        if (valid) form.elements.message?.focus();
         valid = false;
     }
     if (!valid) return;
@@ -381,22 +454,24 @@ form?.addEventListener("submit", (event) => {
 messageClose?.addEventListener("click", () => overlay?.classList.remove("is-open"));
 
 document.querySelector("[data-cookie-accept]")?.addEventListener("click", () => {
-    setCookie("portfolio_cookie_consent", "accepted", 180);
+    safeStorageSet(localStorage, consentKey, "accepted");
+    setCookie(consentKey, "accepted", 180);
     savePreference("portfolio_theme", body.classList.contains("dark") ? "dark" : "light");
     savePreference("portfolio_readable", body.classList.contains("readable"));
     savePreference("portfolio_reduced_motion", body.classList.contains("reduce-motion"));
     savePreference("portfolio_high_contrast", body.classList.contains("high-contrast"));
     savePreference("portfolio_text_scale", getComputedStyle(body).getPropertyValue("--scale").trim() || "1");
-    cookieBanner?.classList.remove("is-open");
+    hideCookieBanner();
 });
 
 document.querySelector("[data-cookie-decline]")?.addEventListener("click", () => {
-    setCookie("portfolio_cookie_consent", "declined", 30);
-    cookieBanner?.classList.remove("is-open");
+    safeStorageSet(localStorage, consentKey, "declined");
+    setCookie(consentKey, "declined", 30);
+    hideCookieBanner();
 });
 
 document.querySelector("[data-cookie-manage]")?.addEventListener("click", () => {
-    cookieBanner?.classList.add("is-open");
+    showCookieBanner();
 });
 
 document.addEventListener("keydown", (event) => {

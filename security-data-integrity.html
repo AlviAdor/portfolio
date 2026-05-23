@@ -5,28 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Data integrity security approach - Alvi Ador's portfolio.">
     <title>Data Integrity | Alvi Ador</title>
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem('portfolio_theme');
+                var introSeen = localStorage.getItem('portfolio_intro_seen') === 'true';
+                var hour = new Date().getHours();
+                var defaultTheme = hour >= 7 && hour < 18 ? 'light' : 'dark';
+                document.documentElement.dataset.theme = savedTheme || defaultTheme;
+                if (introSeen) {
+                    document.documentElement.dataset.introSeen = 'true';
+                }
+            } catch (error) {
+                document.documentElement.dataset.theme = new Date().getHours() >= 7 && new Date().getHours() < 18 ? 'light' : 'dark';
+            }
+        }());
+    </script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-    <div class="intro-overlay" data-intro>
-        <div class="intro-content">
-            <div class="intro-mark">
-                <svg width="64" height="64" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="g-intro" x1="0" x2="1">
-                            <stop offset="0" stop-color="#77e6c8"/>
-                            <stop offset="1" stop-color="#9b8cff"/>
-                        </linearGradient>
-                    </defs>
-                    <rect width="44" height="44" rx="10" fill="url(#g-intro)"/>
-                    <text x="50%" y="55%" text-anchor="middle" font-family="Segoe UI, Roboto, Arial" font-weight="900" font-size="16" fill="#f5f7f4">AA</text>
-                </svg>
-            </div>
-            <h1 class="intro-greeting" data-intro-greeting>Greetings</h1>
-            <p class="intro-subtitle">Alvi Ador | CSE Student & Secure Web Developer</p>
-        </div>
-    </div>
-
     <div class="preloader" data-preloader>
         <div class="loader-mark" aria-hidden="true">
             <span></span>
@@ -104,28 +101,25 @@
             <input type="range" min="0" max="2" value="0" step="1" data-text-size>
         </label>
         <button class="reset-button" type="button" data-reset-access>Reset</button>
+                <script>
+                    (function () {
+                        try {
+                            var savedTheme = localStorage.getItem('portfolio_theme');
+                            var introSeen = localStorage.getItem('portfolio_intro_seen') === 'true';
+                            var hour = new Date().getHours();
+                            var defaultTheme = hour >= 7 && hour < 18 ? 'light' : 'dark';
+                            document.documentElement.dataset.theme = savedTheme || defaultTheme;
+                            if (introSeen) {
+                                document.documentElement.dataset.introSeen = 'true';
+                            }
+                        } catch (error) {
+                            document.documentElement.dataset.theme = new Date().getHours() >= 7 && new Date().getHours() < 18 ? 'light' : 'dark';
+                        }
+                    }());
+                </script>
     </aside>
 
     <main>
-        <section class="detail-hero section-screen">
-            <div class="section-intro">
-                <p class="section-label">Security Focus</p>
-                <h1>Encrypted storage with strict schema design and zero tolerance for data breaches.</h1>
-                <p>I do not allow data breaches. Every record is encrypted at rest, validated on entry, and protected by strict access rules. Your information will not be exposed, leaked, or compromised.</p>
-            </div>
-        </section>
-
-        <section class="detail-grid section-screen">
-            <div class="section-intro">
-                <h2>Protection Architecture</h2>
-            </div>
-            <div class="security-grid">
-                <article>
-                    <span>Encryption</span>
-                    <h3>Data at rest</h3>
-                    <p>Sensitive data is encrypted at rest and in transit using industry-standard algorithms.</p>
-                </article>
-                <article>
                     <span>Schema</span>
                     <h3>Strict design</h3>
                     <p>Each field has defined types, lengths, and validation rules. Malformed data is rejected.</p>
@@ -160,6 +154,6 @@
         </section>
     </main>
 
-    <script src="assets/app.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

@@ -5,28 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="End-to-end encrypted secure messaging - Alvi Ador's portfolio.">
     <title>Secure Messaging | Alvi Ador</title>
+    <script>
+        (function () {
+            try {
+                var savedTheme = localStorage.getItem('portfolio_theme');
+                var introSeen = localStorage.getItem('portfolio_intro_seen') === 'true';
+                var hour = new Date().getHours();
+                var defaultTheme = hour >= 7 && hour < 18 ? 'light' : 'dark';
+                document.documentElement.dataset.theme = savedTheme || defaultTheme;
+                if (introSeen) {
+                    document.documentElement.dataset.introSeen = 'true';
+                }
+            } catch (error) {
+                document.documentElement.dataset.theme = new Date().getHours() >= 7 && new Date().getHours() < 18 ? 'light' : 'dark';
+            }
+        }());
+    </script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-    <div class="intro-overlay" data-intro>
-        <div class="intro-content">
-            <div class="intro-mark">
-                <svg width="64" height="64" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="g-intro" x1="0" x2="1">
-                            <stop offset="0" stop-color="#77e6c8"/>
-                            <stop offset="1" stop-color="#9b8cff"/>
-                        </linearGradient>
-                    </defs>
-                    <rect width="44" height="44" rx="10" fill="url(#g-intro)"/>
-                    <text x="50%" y="55%" text-anchor="middle" font-family="Segoe UI, Roboto, Arial" font-weight="900" font-size="16" fill="#f5f7f4">AA</text>
-                </svg>
-            </div>
-            <h1 class="intro-greeting" data-intro-greeting>Greetings</h1>
-            <p class="intro-subtitle">Alvi Ador | CSE Student & Secure Web Developer</p>
-        </div>
-    </div>
-
     <div class="preloader" data-preloader>
         <div class="loader-mark" aria-hidden="true">
             <span></span>
@@ -104,28 +101,25 @@
             <input type="range" min="0" max="2" value="0" step="1" data-text-size>
         </label>
         <button class="reset-button" type="button" data-reset-access>Reset</button>
+                <script>
+                    (function () {
+                        try {
+                            var savedTheme = localStorage.getItem('portfolio_theme');
+                            var introSeen = localStorage.getItem('portfolio_intro_seen') === 'true';
+                            var hour = new Date().getHours();
+                            var defaultTheme = hour >= 7 && hour < 18 ? 'light' : 'dark';
+                            document.documentElement.dataset.theme = savedTheme || defaultTheme;
+                            if (introSeen) {
+                                document.documentElement.dataset.introSeen = 'true';
+                            }
+                        } catch (error) {
+                            document.documentElement.dataset.theme = new Date().getHours() >= 7 && new Date().getHours() < 18 ? 'light' : 'dark';
+                        }
+                    }());
+                </script>
     </aside>
 
     <main>
-        <section class="detail-hero section-screen">
-            <div class="section-intro">
-                <p class="section-label">Modern Security</p>
-                <h1>End-to-end encrypted messaging with zero-knowledge architecture. What you send stays yours.</h1>
-                <p>Every message is encrypted on your device before transmission. I cannot access it. The database stores encrypted data only. Even I cannot read your messages—that's the promise of modern security.</p>
-            </div>
-        </section>
-
-        <section class="detail-grid section-screen">
-            <div class="section-intro">
-                <h2>Zero-Knowledge Submission Security</h2>
-            </div>
-            <div class="security-grid">
-                <article>
-                    <span>E2E Encryption</span>
-                    <h3>TLS 1.3 in transit</h3>
-                    <p>Messages are encrypted during transmission using modern TLS 1.3 protocol. Man-in-the-middle attacks have zero chance.</p>
-                </article>
-                <article>
                     <span>Zero-Knowledge</span>
                     <h3>I can't read it</h3>
                     <p>End-to-end encryption means your message is encrypted on your device. Even the server stores only encrypted bytes.</p>
@@ -188,6 +182,6 @@
         </section>
     </main>
 
-    <script src="assets/app.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>
