@@ -1,0 +1,17 @@
+{
+  "name": "alviador-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node.js portfolio site served with Express and deployed on Vercel.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

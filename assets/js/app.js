@@ -15,10 +15,12 @@ const overlay = document.querySelector("[data-message-overlay]");
 const messageClose = document.querySelector("[data-message-close]");
 const mailtoLink = document.querySelector("[data-mailto-link]");
 const cookieBanner = document.querySelector("[data-cookie-banner]");
-const homeLink = document.querySelector("[data-home-link]");
 const isHomePage = location.pathname.endsWith("index.html") || location.pathname.endsWith("/") || location.pathname === "";
 const introSeenKey = "portfolio_intro_seen";
 const consentKey = "portfolio_cookie_consent";
+
+// Ensure intro is shown again by clearing any previously persisted 'seen' flag
+safeStorageSet(localStorage, introSeenKey, "false");
 
 const greetings = ["Greetings", "Hello", "Assalamu alaikum", "Hola", "Salut", "Ciao", "Merhaba", "Xin chao", "你好", "مرحبا", "Привет", "Bonjour"];
 const greetingAccents = ["#0f766e", "#5b6b7a", "#7c7f84", "#ecebe6", "#6b7280", "#81aefc", "#9b8cff"];
@@ -42,13 +44,6 @@ function safeStorageSet(storage, key, value) {
 
 function setGreetingAccent(index) {
     document.documentElement.style.setProperty("--greeting-accent", greetingAccents[index % greetingAccents.length]);
-}
-
-// Handle home button click to skip intro on return visits
-if (homeLink) {
-    homeLink.addEventListener("click", () => {
-        sessionStorage.setItem("skipIntro", "true");
-    });
 }
 
 // Handle back links that should skip intro
@@ -245,7 +240,7 @@ const navBack = document.querySelector('[data-nav-back]');
 let _lastFocusedBeforeNav = null;
 let _navKeyHandler = null;
 let _navHideTimer = null;
-const navLinks = Array.from(document.querySelectorAll('[data-nav-link], [data-nav-home]'));
+const navLinks = Array.from(document.querySelectorAll('[data-nav-link]'));
 const trackedSections = Array.from(['home', 'projects', 'security', 'about', 'contact']
     .map((id) => document.getElementById(id))
     .filter(Boolean));
@@ -359,6 +354,23 @@ nav?.addEventListener('click', (e) => {
 
 navBack?.addEventListener('click', () => closeNav(true));
 
+// New back button inside the nav list (back-to-top behavior)
+const navHomeBack = document.querySelector('.nav-homeback');
+navHomeBack?.addEventListener('click', () => {
+    closeNav(true);
+    scrollToTop();
+});
+
+// Header back buttons (pages that show a brand link replace it with a header-back button)
+const headerBacks = Array.from(document.querySelectorAll('[data-header-back]'));
+headerBacks.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        // Prefer a normal back in history; fall back to home if none
+        if (history.length > 1) history.back();
+        else window.location.href = '/';
+    });
+});
+
 nav?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => closeNav(true));
 });
@@ -414,7 +426,7 @@ function setError(name, message) {
     if (error) error.textContent = message;
 }
 
-form?.addEventListener("submit", (event) => {
+form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const data = new FormData(form);
     const name = String(data.get("name") || "").trim();
@@ -447,6 +459,24 @@ form?.addEventListener("submit", (event) => {
     const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
     const bodyText = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
     mailtoLink?.setAttribute("href", `mailto:sarker.faizal2537@gmail.com?subject=${subject}&body=${bodyText}`);
+
+    try {
+        const response = await fetch("/api/contact", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name, email, message })
+        });
+
+        if (!response.ok) {
+            throw new Error("Request failed");
+        }
+    } catch (error) {
+        // Keep existing UX: allow a manual email fallback if API is unavailable.
+        setError("message", "Could not send through server. Use 'Open Email' as fallback.");
+    }
+
     overlay?.classList.add("is-open");
     form.reset();
 });

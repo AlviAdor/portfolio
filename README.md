@@ -1,6 +1,39 @@
 # Portfolio Website
 
-Static portfolio for Alvi Ador, focused on cybersecurity interest, software projects, and web development work.
+Node.js portfolio for Alvi Ador, focused on cybersecurity interest, software projects, and web development work.
+
+## Runtime
+
+- Node.js 18+
+- Express server (`server.js`)
+- Vercel deployment (`vercel.json`)
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+## Deploy to Vercel
+
+1. Push this repository to GitHub.
+2. Import the repo in Vercel.
+3. Keep framework preset as `Other`.
+4. Build settings are auto-detected from `vercel.json`.
+5. Deploy.
+
+Optional CLI deploy:
+
+```bash
+npm i -g vercel
+vercel
+vercel --prod
+```
+
+## Includes
 
 ## Includes
 
@@ -10,6 +43,8 @@ Static portfolio for Alvi Ador, focused on cybersecurity interest, software proj
 - Project sections for ANS Hospital, Job Portal, DX-Ball, Mobile Shop Management, and related work
 - Project visuals from available local project assets
 - Cookie preference banner for theme and display settings
+- Node.js route handling for all site pages
+- Example contact API endpoint at `/api/contact`
 
 LinkedIn profile content is not copied because the public page redirects to LinkedIn's auth wall without login access.
 
