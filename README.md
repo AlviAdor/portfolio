@@ -44,7 +44,8 @@ vercel --prod
 ## Includes
 
 - LinkedIn-aligned hero and about copy
-- GitHub project highlights for ANS Hospital Management System, DX-Ball, Mobile Shop Management System, Sales Intelligence Data Analysis, and CNN Development on Custom Dataset
+- GitHub project highlights for ANS Hospital Management System, DX-Ball, Mobile Shop Management System, Sales Intelligence Data Analysis, CNN Development on Custom Dataset, and the portfolio website itself
+- Thumbnail-led project cards with consistent image shapes, overlays, and icon badges
 - Social links for GitHub and LinkedIn
 - Contact email: `sarker.faizal2537@gmail.com`
 - Project visuals from available local project assets
