@@ -16,6 +16,10 @@
                 if (introSeen) {
                     document.documentElement.dataset.introSeen = 'true';
                 }
+                if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                }
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
             } catch (error) {
                 document.documentElement.dataset.theme = new Date().getHours() >= 7 && new Date().getHours() < 18 ? 'light' : 'dark';
             }
