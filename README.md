@@ -1,6 +1,6 @@
 # Portfolio Website
 
-Node.js portfolio for Alvi Ador, focused on cybersecurity interest, software projects, and web development work.
+Node.js portfolio for Md. Faizal Alvi Sarker, focused on cybersecurity, machine learning, software engineering, and public project work.
 
 ## Runtime
 
@@ -33,20 +33,24 @@ vercel
 vercel --prod
 ```
 
-## Includes
+## Public profile snapshot
+
+- Name: Md. Faizal Alvi Sarker
+- Education: BSc in Computer Science & Engineering at American International University-Bangladesh, 2022-2026
+- Focus: Cybersecurity, machine learning, full-stack development, and practical software engineering
+- Leadership: Co-Founder at Jersey Stall BD
+- Certifications: Cisco IT Essentials, IELTS 7.0
 
 ## Includes
 
-- Cybersecurity-focused hero section
-- GitHub, LinkedIn, Discord, and Reddit links from the public GitHub profile
+- LinkedIn-aligned hero and about copy
+- GitHub project highlights for ANS Hospital Management System, DX-Ball, Mobile Shop Management System, Sales Intelligence Data Analysis, and CNN Development on Custom Dataset
+- Social links for GitHub and LinkedIn
 - Contact email: `sarker.faizal2537@gmail.com`
-- Project sections for ANS Hospital, Job Portal, DX-Ball, Mobile Shop Management, and related work
 - Project visuals from available local project assets
 - Cookie preference banner for theme and display settings
 - Node.js route handling for all site pages
 - Example contact API endpoint at `/api/contact`
-
-LinkedIn profile content is not copied because the public page redirects to LinkedIn's auth wall without login access.
 
 ## Assets reorganization
 

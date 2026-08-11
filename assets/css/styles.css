@@ -1161,6 +1161,15 @@ main {
         line-height: 1.92;
     }
 
+    .hero-subtitle,
+    .section-intro p,
+    .project-copy p,
+    .project-card p,
+    .about-copy p,
+    .method-grid article p {
+        max-width: none;
+    }
+
     .section-intro h2 {
         font-size: clamp(1.55rem, 7vw, 2rem);
         max-width: 16ch;
@@ -1215,6 +1224,74 @@ main {
     .security-grid article {
         min-height: 100%;
         max-width: none;
+    }
+
+    .method-grid article {
+        position: relative;
+        padding: 18px 18px 18px 20px;
+        border-left: 3px solid color-mix(in srgb, var(--green) 70%, var(--line));
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface-2) 88%, transparent));
+    }
+
+    .method-grid article span {
+        margin-bottom: 6px;
+        font-size: 0.74rem;
+    }
+
+    .method-grid article p {
+        font-size: 0.96rem;
+        line-height: 1.7;
+    }
+
+    .signal-strip strong,
+    .project-kicker,
+    .section-label {
+        color: var(--text);
+    }
+
+    .signal-strip div {
+        background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface-2) 88%, transparent));
+    }
+
+    .signal-strip strong,
+    .method-grid article span {
+        font-size: 0.72rem;
+    }
+
+    .project-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 18px;
+    }
+
+    .project-card figure,
+    .project-card .generated-preview {
+        min-height: 140px;
+        border-radius: 18px;
+    }
+
+    .project-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .project-card p {
+        font-size: 0.96rem;
+        line-height: 1.72;
+    }
+
+    .project-links a,
+    .contact-logo,
+    .nav-tool {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .about-copy p + p {
+        margin-top: 14px;
+    }
+
+    .about-copy p,
+    .hero-subtitle {
+        font-size: 0.98rem;
     }
 
     .featured-project {
