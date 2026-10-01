@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="A C# desktop app for inventory and customer management, built around a real small-shop workflow with password-protected deletion.">
+    <title>Mobile Shop Management System | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,46 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Project</p>
+                <h2>Mobile Shop Management: a desktop app for a problem I actually watched someone have.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Inventory</span>
+                    <h3>Phones in, phones out</h3>
+                    <p>Add new stock with model, price, and quantity; the view updates live as records are added, edited, or sold.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>Customers</span>
+                    <h3>A real customer ledger</h3>
+                    <p>Track who bought what, keep contact details on file, and pull up a customer's history without digging through paper receipts.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Protected</span>
+                    <h3>Password-gated deletion</h3>
+                    <p>Deleting a record -- stock or customer -- requires a password prompt, so a misclick during a busy shift can't silently wipe data.</p>
                 </article>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>Why a desktop app, not a web app</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        This one was built for a small mobile phone shop's actual day-to-day: adding new stock, logging sales, keeping a customer list, and not losing any of it to a crashed spreadsheet. A Windows Forms desktop app made more sense than a web app here -- the shop has one computer, no reliable internet dependency needed for basic operation, and the owner wanted something that opens and just works.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        The feature I spent the most care on is the one that sounds the most minor: deletion is password-gated. Inventory and customer records are the kind of data where an accidental delete during a busy afternoon is a real problem, not a hypothetical one, so removing anything requires a deliberate password prompt rather than a single confirm dialog someone can click through on autopilot.
+                    </p>
+                    <p>
+                        It's a C# / .NET project, and deliberately scoped to what the shop actually needed rather than a general-purpose POS system -- add phones, manage customers, track stock, view records, protected deletion. No feature in it exists because it sounded impressive to build.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="https://github.com/AlviAdor/MobileShopManagementSystem" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

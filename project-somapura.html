@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="A computer graphics recreation of the historic Somapura Mahavihara monastery, built directly on OpenGL and FreeGLUT.">
+    <title>Somapura Mahavihara | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,46 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Project</p>
+                <h2>Somapura Mahavihara: a computer-graphics recreation of a 1,200-year-old monastery.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Rendering</span>
+                    <h3>Built directly on OpenGL</h3>
+                    <p>No game engine -- the scene graph, camera, and lighting are hand-written against raw OpenGL and FreeGLUT, which means every visual decision is one I made explicitly.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>Scenes</span>
+                    <h3>Multiple interchangeable views</h3>
+                    <p>Several distinct scenes of the monastery complex, switchable with keyboard input, each with its own camera framing and lighting setup.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Audio</span>
+                    <h3>Not a silent render</h3>
+                    <p>Ambient audio support layered into the scene, so it's an experience to move through rather than a static 3D model viewer.</p>
                 </article>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>Why build a renderer instead of using a game engine</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        Somapura Mahavihara is a real UNESCO World Heritage site in Bangladesh -- one of the largest known Buddhist monasteries south of the Himalayas. I wanted to recreate it as a computer graphics project specifically because reconstructing an actual historical structure forces you to deal with proportion, layout, and lighting that have to look right, not just render without crashing.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        I built it directly on OpenGL and FreeGLUT rather than reaching for a game engine, because the point of the course project was understanding the rendering pipeline itself -- transformations, camera matrices, lighting models -- not learning an engine's abstraction layer on top of it.
+                    </p>
+                    <p>
+                        Multiple scenes are switchable by keyboard, each a different vantage point or area of the complex, and I added ambient audio support so moving through it reads as an experience rather than a static viewer. It's the project on this list furthest from security work, and I kept it in the list for exactly that reason -- it's real, finished, non-trivial C++ work in a completely different domain.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="https://github.com/AlviAdor/Somapura-Mahavihara" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

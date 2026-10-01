@@ -223,6 +223,13 @@ h3 {
 
 .brand-logo svg { display: block; width: 18px; height: 18px; }
 
+.nav-back {
+    color: #ffffff;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+}
+
 /* Animation variants for scroll reveal */
 .reveal-target.reveal-slide-left { transform: translateX(-28px) translateY(6px) scale(.995); }
 .reveal-target.reveal-slide-right { transform: translateX(28px) translateY(6px) scale(.995); }
@@ -352,6 +359,24 @@ html[data-intro-seen="true"] .intro-overlay {
     color: var(--text);
 }
 
+.nav-login {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    color: var(--text) !important;
+    transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+}
+
+.nav-login:hover,
+.nav-login:focus {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--green) 45%, var(--line));
+    background: color-mix(in srgb, var(--green) 10%, var(--surface));
+}
+
 .topbar-actions {
     display: flex;
     align-items: center;
@@ -444,6 +469,14 @@ html[data-intro-seen="true"] .intro-overlay {
     border-bottom: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
 }
 
+.side-nav a[data-login-link] {
+    margin-top: 10px;
+    border-radius: 14px;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+    background: color-mix(in srgb, var(--green) 8%, transparent);
+    color: var(--green);
+}
+
 .side-nav a.is-active,
 .side-nav a[aria-current="page"] {
     color: var(--green);
@@ -482,13 +515,35 @@ html[data-intro-seen="true"] .intro-overlay {
     box-shadow: var(--shadow);
 }
 
+/* Make the in-menu back control a dark circle with white icon (overrides nav-tool gradient) */
+.side-nav .nav-homeback,
+.side-nav .nav-back.nav-homeback {
+    background: #111111 !important;
+    color: #ffffff !important;
+    border-color: #111111 !important;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    padding: 0;
+    display: inline-grid;
+    place-items: center;
+    box-shadow: none;
+}
+.side-nav .nav-homeback svg { width: 18px; height: 18px; display: block; }
+
 .nav-tool span:first-child {
     letter-spacing: 0.01em;
 }
 
+.access-panel .nav-manage {
+    width: 100%;
+    margin-top: 6px;
+}
+
 /* Menu button visual state */
 .menu-button { display: inline-grid; gap:6px; align-items:center; justify-items:center; width:44px; height:44px; padding:8px; border-radius:10px; border:1px solid var(--line); background: color-mix(in srgb, var(--surface) 92%, transparent); }
-.menu-button span { display:block; width:18px; height:2px; background: currentColor; border-radius:2px; }
+.menu-button { color: var(--text); }
+.menu-button span { display:block; width:18px; height:2px; background: var(--text); border-radius:2px; }
 .menu-button.is-open { background: color-mix(in srgb, var(--text) 6%, var(--surface)); }
 
 /* Accessibility panel hidden by default, revealed with .is-open */
@@ -604,6 +659,94 @@ main {
     min-height: calc(100vh - var(--topbar-height));
 }
 
+/* A page-intro hero with no visual column and no need to fill the screen --
+   used on pages like About that open with a statement, not a landing moment. */
+.hero.hero-compact {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: auto;
+    padding-bottom: 0;
+}
+
+.hero-compact .hero-copy,
+.hero-compact .hero-subtitle {
+    max-width: 56ch;
+}
+
+/* A compact hero that still carries a visual (the About page portrait) --
+   two columns again, just without forcing full-viewport height. */
+.hero.hero-compact.hero-with-photo {
+    grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+}
+
+.hero-with-photo .hero-copy {
+    max-width: 44ch;
+}
+
+.about-photo-wrap {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.about-photo-glow {
+    position: absolute;
+    inset: 6%;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--green) 55%, transparent), color-mix(in srgb, #9b8cff 55%, transparent));
+    filter: blur(54px);
+    opacity: 0.4;
+    border-radius: 48% 52% 55% 45% / 45% 55% 45% 55%;
+    z-index: 0;
+    animation: about-glow-float 9s ease-in-out infinite;
+}
+
+.about-photo {
+    position: relative;
+    z-index: 1;
+    width: min(320px, 72vw);
+    border-radius: 28px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+    animation: about-photo-float 7s ease-in-out infinite, about-photo-in 900ms cubic-bezier(.2, .9, .2, 1) both;
+}
+
+.about-photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+@keyframes about-photo-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+@keyframes about-photo-in {
+    0% { opacity: 0; transform: translateY(26px) scale(0.96); }
+    100% { opacity: 1; transform: none; }
+}
+
+@keyframes about-glow-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(12px, -16px) scale(1.08); }
+}
+
+@media (max-width: 879px) {
+    .hero.hero-compact.hero-with-photo {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .about-photo-wrap {
+        order: -1;
+        padding: 10px;
+    }
+    .about-photo {
+        width: min(240px, 60vw);
+    }
+}
+
 .hero-copy,
 .section-intro,
 .project-copy,
@@ -659,7 +802,8 @@ main {
 .hero-actions,
 .project-links,
 .contact-actions,
-.social-links {
+.social-links,
+.about-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -724,12 +868,77 @@ main {
     overflow: hidden;
 }
 
+/* Every image keeps its own natural aspect ratio -- a tall screenshot stays
+   tall, a wide one stays wide. Cropping to a uniform box was hiding real
+   content (the top of a form, the bottom of a terminal window), so cards
+   size themselves to whatever they're actually showing instead. */
 .hero-visual img,
 .project-media img,
 .project-card figure img {
+    display: block;
     width: 100%;
     height: auto;
-    object-fit: cover;
+}
+
+.generated-preview {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--green) 85%, var(--surface)), color-mix(in srgb, var(--violet) 70%, var(--surface)));
+}
+
+.generated-preview.shop {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 85%, var(--surface)), color-mix(in srgb, var(--coral) 70%, var(--surface)));
+}
+
+.generated-preview span {
+    font-size: clamp(2.6rem, 6vw, 3.6rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+}
+
+.screenshot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 18px;
+    margin-top: 28px;
+}
+
+.screenshot-grid figure {
+    margin: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    box-shadow: var(--shadow);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.screenshot-grid figure:hover {
+    transform: translateY(-4px);
+}
+
+.screenshot-grid img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.screenshot-grid figcaption {
+    padding: 12px 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+    border-top: 1px solid var(--line);
+}
+
+@media (max-width: 879px) {
+    .screenshot-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
 }
 
 .signal-strip {
@@ -765,10 +974,33 @@ main {
     margin-top: 28px;
 }
 
+/* Cards hold independently-sized images, so don't stretch every card in a
+   row to match the tallest one -- let each sit at its own natural height. */
+.project-grid {
+    align-items: start;
+}
+
 .project-kicker,
 .method-grid article span {
     display: inline-block;
     margin-bottom: 10px;
+}
+
+.projects-more {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+}
+
+.projects-more span {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    max-width: 52ch;
 }
 
 .section-intro h2 {
@@ -780,6 +1012,7 @@ main {
 .featured-project {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    align-items: start;
     gap: 24px;
     padding: 22px;
     border-radius: 28px;
@@ -807,6 +1040,12 @@ main {
 .project-card {
     display: grid;
     gap: 16px;
+    min-width: 0;
+}
+
+.project-card,
+.security-grid article {
+    scroll-snap-align: start;
 }
 
 .skill-cloud {
@@ -819,9 +1058,19 @@ main {
 .skill-cloud span {
     padding: 10px 14px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 92%, transparent), color-mix(in srgb, var(--surface-2) 86%, transparent));
     border: 1px solid var(--line);
     color: var(--muted);
+    transition: transform 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.skill-cloud span:hover,
+.skill-cloud span:hover {
+    transform: translateY(-4px) scale(1.02);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 8%, var(--green)), color-mix(in srgb, var(--surface-2) 76%, transparent));
+    color: var(--text);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    outline: none;
 }
 
 .contact-layout {
@@ -881,6 +1130,40 @@ main {
     gap: 12px;
 }
 
+.security-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 28px;
+}
+
+.security-grid article {
+    display: grid;
+    gap: 14px;
+    border-radius: 24px;
+    padding: 22px;
+    min-width: 0;
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--surface) 94%, transparent);
+    box-shadow: var(--shadow);
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.security-grid article:hover {
+    transform: translateY(-4px);
+}
+
+.detail-link {
+    width: fit-content;
+    margin-top: 4px;
+    font-weight: 700;
+    color: var(--green);
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}
+
 .message-overlay {
     place-items: center;
     opacity: 0;
@@ -894,16 +1177,99 @@ main {
 }
 
 .site-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 22px clamp(20px, 5vw, 80px) 36px;
+    padding: 56px clamp(20px, 5vw, 80px) 32px;
     color: var(--muted);
+    border-top: 1px solid var(--line);
+    margin-top: 40px;
 }
 
 .site-footer button {
     min-height: 42px;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 32px;
+    padding-bottom: 32px;
+}
+
+.footer-brand .brand-mark-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    color: var(--text);
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+}
+
+.footer-brand .mark {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #77e6c8, #9b8cff);
+    color: #0b0b0b;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.footer-brand p {
+    max-width: 32ch;
+    line-height: 1.6;
+    font-size: 0.9rem;
+}
+
+.footer-heading {
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    margin: 0 0 14px;
+}
+
+.footer-nav,
+.footer-social {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.92rem;
+}
+
+.footer-nav a,
+.footer-social a {
+    color: var(--muted);
+    width: fit-content;
+    transition: color 160ms ease;
+}
+
+.footer-nav a:hover,
+.footer-social a:hover {
+    color: var(--text);
+}
+
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+}
+
+@media (max-width: 879px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 26px;
+    }
+    .site-footer {
+        padding-top: 40px;
+    }
 }
 
 .reveal-target {
@@ -929,6 +1295,11 @@ main {
 @media (min-width: 880px) {
     .side-nav { display: none !important; }
     .menu-button { display: none; }
+    .project-grid,
+    .security-grid {
+        overflow: visible;
+        scroll-snap-type: none;
+    }
 }
 
 /* Small screens: ensure desktop nav hidden */
@@ -963,13 +1334,15 @@ main {
         margin-left: auto;
     }
 
-    .site-footer [data-cookie-manage] {
-        display: none;
-    }
-
     .brand-logo {
         width: 38px;
         height: 38px;
+    }
+
+    .nav-back {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
     }
 
     .menu-button {
@@ -980,7 +1353,7 @@ main {
     .side-nav {
         padding: 84px 18px 28px;
         gap: 8px;
-        background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 96%, transparent), var(--surface));
+        background: var(--surface);
     }
 
     .nav-head {
@@ -1004,7 +1377,12 @@ main {
     }
 
     .hero {
-        gap: 24px;
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .hero-visual {
+        order: 2;
     }
 
     .hero-copy,
@@ -1081,6 +1459,75 @@ main {
     .project-grid {
         grid-template-columns: 1fr;
         gap: 12px;
+    }
+
+    .project-grid,
+    .security-grid {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(280px, 82vw);
+        grid-template-columns: none;
+        overflow-x: auto;
+        overflow-y: visible;
+        gap: 14px;
+        padding-bottom: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+    }
+
+    .contact-layout {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(86vw, 420px);
+        grid-template-columns: none;
+        gap: 14px;
+        overflow-x: auto;
+        overflow-y: visible;
+        padding-bottom: 10px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        scrollbar-width: none;
+    }
+
+    .contact-layout::-webkit-scrollbar {
+        display: none;
+    }
+
+    .contact-layout > * {
+        min-width: 0;
+        scroll-snap-align: start;
+    }
+
+    .project-grid::-webkit-scrollbar,
+    .security-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .project-card,
+    .security-grid article {
+        min-height: 100%;
+        max-width: 340px;
+    }
+
+    .featured-project {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-form,
+    .contact-card {
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .featured-project .project-media {
+        min-height: 240px;
+    }
+
+    .security-grid article {
+        padding: 20px;
     }
 
     .project-links,

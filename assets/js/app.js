@@ -15,10 +15,23 @@ const overlay = document.querySelector("[data-message-overlay]");
 const messageClose = document.querySelector("[data-message-close]");
 const mailtoLink = document.querySelector("[data-mailto-link]");
 const cookieBanner = document.querySelector("[data-cookie-banner]");
-const homeLink = document.querySelector("[data-home-link]");
 const isHomePage = location.pathname.endsWith("index.html") || location.pathname.endsWith("/") || location.pathname === "";
 const introSeenKey = "portfolio_intro_seen";
 const consentKey = "portfolio_cookie_consent";
+
+// Read from <meta name="secure-messaging-base">, so moving the secure-auth demo
+// to its own repo/domain is a one-line change in index.html -- nothing here.
+const SECURE_MESSAGING_BASE =
+    document.querySelector('meta[name="secure-messaging-base"]')?.content || "demos/secure-auth/";
+
+// Every nav link that says "Login" points at wherever that meta tag says the
+// secure-auth app actually lives, so it keeps working after the move too.
+document.querySelectorAll("[data-login-link]").forEach((link) => {
+    link.setAttribute("href", `${SECURE_MESSAGING_BASE}login.php`);
+});
+
+// Ensure intro is shown again by clearing any previously persisted 'seen' flag
+safeStorageSet(localStorage, introSeenKey, "false");
 
 const greetings = ["Greetings", "Hello", "Assalamu alaikum", "Hola", "Salut", "Ciao", "Merhaba", "Xin chao", "你好", "مرحبا", "Привет", "Bonjour"];
 const greetingAccents = ["#0f766e", "#5b6b7a", "#7c7f84", "#ecebe6", "#6b7280", "#81aefc", "#9b8cff"];
@@ -42,13 +55,6 @@ function safeStorageSet(storage, key, value) {
 
 function setGreetingAccent(index) {
     document.documentElement.style.setProperty("--greeting-accent", greetingAccents[index % greetingAccents.length]);
-}
-
-// Handle home button click to skip intro on return visits
-if (homeLink) {
-    homeLink.addEventListener("click", () => {
-        sessionStorage.setItem("skipIntro", "true");
-    });
 }
 
 // Handle back links that should skip intro
@@ -144,13 +150,33 @@ window.addEventListener('pageshow', (event) => {
 });
 
 // Update theme toggle icon to reflect current theme
+// The icon shows what clicking it will switch you TO, not the mode you're
+// currently in -- a sun while dark (click for light), a moon while light
+// (click for dark). Showing a moon while already in dark mode, like this did
+// before, reads backwards: the icon should say where the click takes you.
 function updateThemeIcon() {
     if (!themeToggles.length) return;
-    const icon = body.classList.contains('dark')
-        ? '<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/></svg>'
-        : '<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>';
+    const sunIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+        + '<circle cx="12" cy="12" r="4.5" fill="currentColor"/>'
+        + '<g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">'
+        + '<line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/>'
+        + '<line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/>'
+        + '<line x1="4.2" y1="4.2" x2="5.9" y2="5.9"/><line x1="18.1" y1="18.1" x2="19.8" y2="19.8"/>'
+        + '<line x1="4.2" y1="19.8" x2="5.9" y2="18.1"/><line x1="18.1" y1="5.9" x2="19.8" y2="4.2"/>'
+        + '</g></svg>';
+    const moonIcon = '<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/></svg>';
+    const icon = body.classList.contains('dark') ? sunIcon : moonIcon;
     themeToggles.forEach((button) => {
-        button.innerHTML = icon;
+        // Replace only the <svg> -- the mobile menu's toggle also carries a
+        // "Theme" <span> label next to it, and innerHTML would have wiped
+        // that out along with the icon.
+        const existingSvg = button.querySelector('svg');
+        if (existingSvg) {
+            existingSvg.outerHTML = icon;
+        } else {
+            button.insertAdjacentHTML('beforeend', icon);
+        }
+        button.setAttribute('aria-label', body.classList.contains('dark') ? 'Switch to light mode' : 'Switch to dark mode');
     });
 }
 updateThemeIcon();
@@ -209,8 +235,12 @@ if (greeting) {
     setGreetingAccent(greetingIndex);
 }
 
-// Auto-dismiss intro and preloader after 5 seconds (or immediately if returning from another page)
-const dismissDelay = sessionStorage.getItem("skipIntro") ? 100 : 4200;
+// Auto-dismiss intro and preloader after 5 seconds -- but only on the home page,
+// and only when the greeting intro is actually about to play. Every other page
+// (a security deep-dive reached via "Read more", or a return visit) has nothing
+// to wait for, so it dismisses almost immediately instead of sitting on a loading
+// screen for no reason.
+const dismissDelay = (!isHomePage || sessionStorage.getItem("skipIntro")) ? 100 : 4200;
 setTimeout(() => {
     if (intro && !intro.classList.contains('is-hidden')) dismissIntro();
     // Hide preloader shortly after intro dismisses
@@ -245,7 +275,7 @@ const navBack = document.querySelector('[data-nav-back]');
 let _lastFocusedBeforeNav = null;
 let _navKeyHandler = null;
 let _navHideTimer = null;
-const navLinks = Array.from(document.querySelectorAll('[data-nav-link], [data-nav-home]'));
+const navLinks = Array.from(document.querySelectorAll('[data-nav-link]'));
 const trackedSections = Array.from(['home', 'projects', 'security', 'about', 'contact']
     .map((id) => document.getElementById(id))
     .filter(Boolean));
@@ -359,6 +389,23 @@ nav?.addEventListener('click', (e) => {
 
 navBack?.addEventListener('click', () => closeNav(true));
 
+// New back button inside the nav list (back-to-top behavior)
+const navHomeBack = document.querySelector('.nav-homeback');
+navHomeBack?.addEventListener('click', () => {
+    closeNav(true);
+    scrollToTop();
+});
+
+// Header back buttons (pages that show a brand link replace it with a header-back button)
+const headerBacks = Array.from(document.querySelectorAll('[data-header-back]'));
+headerBacks.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        // Prefer a normal back in history; fall back to home if none
+        if (history.length > 1) history.back();
+        else window.location.href = '/';
+    });
+});
+
 nav?.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => closeNav(true));
 });
@@ -414,6 +461,52 @@ function setError(name, message) {
     if (error) error.textContent = message;
 }
 
+let cryptoClientLoad = null;
+function loadCryptoClient() {
+    if (typeof SecureCrypto !== "undefined") return Promise.resolve(true);
+    if (cryptoClientLoad) return cryptoClientLoad;
+    cryptoClientLoad = new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = `${SECURE_MESSAGING_BASE}assets/crypto-client.js`;
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.head.appendChild(script);
+    });
+    return cryptoClientLoad;
+}
+
+// Encrypts the message in-browser with the admin's public key (RSA-OAEP wraps a
+// one-time AES-256-GCM key) and submits only ciphertext. Returns true if the
+// encrypted send succeeded, false if it quietly fell back (e.g. demo backend not
+// set up on this deployment) so the mailto fallback still works either way.
+async function sendEncryptedContactMessage(name, email, message) {
+    try {
+        if (!window.crypto?.subtle) return false;
+        const loaded = await loadCryptoClient();
+        if (!loaded || typeof SecureCrypto === "undefined") return false;
+
+        const keyRes = await fetch(`${SECURE_MESSAGING_BASE}api.php?action=admin_public_key`);
+        const keyData = await keyRes.json();
+        if (!keyData.ok) return false;
+
+        const enc = await SecureCrypto.encryptForRecipient(message, keyData.publicKey);
+        const body = new URLSearchParams({
+            name, email,
+            ciphertext: enc.ciphertext,
+            iv: enc.iv,
+            wrappedKey: enc.wrappedKey,
+        });
+        const sendRes = await fetch(`${SECURE_MESSAGING_BASE}api.php?action=contact_submit`, {
+            method: "POST",
+            body,
+        });
+        const sendData = await sendRes.json();
+        return !!sendData.ok;
+    } catch (error) {
+        return false;
+    }
+}
+
 form?.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(form);
@@ -447,8 +540,24 @@ form?.addEventListener("submit", (event) => {
     const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
     const bodyText = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
     mailtoLink?.setAttribute("href", `mailto:sarker.faizal2537@gmail.com?subject=${subject}&body=${bodyText}`);
-    overlay?.classList.add("is-open");
-    form.reset();
+
+    const overlayNote = document.querySelector("[data-overlay-note]");
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    sendEncryptedContactMessage(name, email, message)
+        .then((encrypted) => {
+            if (overlayNote) {
+                overlayNote.textContent = encrypted
+                    ? "This message was end-to-end encrypted in your browser (RSA-OAEP + AES-256-GCM) before it ever left your device -- only the admin, signed in with their own password, can decrypt it."
+                    : "Your message is ready to send. Use the button below to email it directly.";
+            }
+            overlay?.classList.add("is-open");
+            form.reset();
+        })
+        .finally(() => {
+            if (submitBtn) submitBtn.disabled = false;
+        });
 });
 
 messageClose?.addEventListener("click", () => overlay?.classList.remove("is-open"));

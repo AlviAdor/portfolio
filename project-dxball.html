@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="An arcade brick-breaker with five distinct game modes, a boost/combo system, and fully configurable settings.">
+    <title>DX-Ball | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,67 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Project</p>
+                <h2>DX-Ball: a brick-breaker that outgrew its own prototype.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Modes</span>
+                    <h3>Five distinct ways to play</h3>
+                    <p>Classic for a balanced run, Speed for risk/reward pressure, Zen for a relaxed survival pace, Rapid Fire for chaos, and Gauntlet, which ramps difficulty continuously the longer you survive.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>Systems</span>
+                    <h3>Boosts and scoring that matter</h3>
+                    <p>Power-ups spawn mid-run -- extra life, wider paddle, slower ball, score multipliers, bonus time -- each with its own visual tell, plus a combo multiplier that rewards consecutive boost pickups.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Settings</span>
+                    <h3>Actually configurable</h3>
+                    <p>Ball color, ball radius, paddle speed, sound on/off with a volume slider, boost animation toggle, and a light/dark theme -- all persisted between sessions.</p>
                 </article>
+            </div>
+        </section>
+
+        <section class="gallery section-band">
+            <div class="section-intro">
+                <p class="section-label">Screenshots</p>
+                <h2>What it actually looks like.</h2>
+            </div>
+            <div class="screenshot-grid">
+                <figure>
+                    <img src="assets/img/screens/dxball-menu.png" alt="DX-Ball main menu with game modes and best scores">
+                    <figcaption>Mode select, with per-mode best scores</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/img/screens/dxball-gameplay.png" alt="DX-Ball in-game screenshot with live score and boost guide">
+                    <figcaption>Mid-run, Classic mode</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/img/screens/dxball-settings.png" alt="DX-Ball settings screen">
+                    <figcaption>Settings</figcaption>
+                </figure>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>Why five modes instead of one</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        DX-Ball started as the kind of brick-breaker clone everyone builds once -- paddle, ball, bricks, done in an afternoon. What kept me coming back to it was the realization that "keep the ball alive" supports a lot more variety than one difficulty curve.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        Each mode changes the actual rules, not just a speed multiplier: Zen mode is deliberately forgiving so it's relaxing rather than tense, Rapid Fire leans into frequent hazards for players who want chaos, and Gauntlet is the one built around a continuously ramping difficulty curve so a single run can go from easy to genuinely hard without a level transition.
+                    </p>
+                    <p>
+                        The settings screen was worth building properly rather than hardcoding defaults -- ball radius and paddle speed sound like minor tuning values, but they change how a mode actually feels to play, and persisting them (along with a best score per mode) was what made it feel like a real small game instead of a script I run once and forget.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="https://github.com/AlviAdor/DX-Ball" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

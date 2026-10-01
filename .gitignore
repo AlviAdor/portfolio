@@ -1,0 +1,5 @@
+.DS_Store
+**/.DS_Store
+
+# Local-only secrets for the secure-auth-demo backend, never committed
+demos/secure-auth/config/config.local.php

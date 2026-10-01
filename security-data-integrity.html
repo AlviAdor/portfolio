@@ -5,22 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Data integrity security approach - Alvi Ador's portfolio.">
     <title>Data Integrity | Alvi Ador</title>
-    <script>
-        (function () {
-            try {
-                var savedTheme = localStorage.getItem('portfolio_theme');
-                var introSeen = localStorage.getItem('portfolio_intro_seen') === 'true';
-                var hour = new Date().getHours();
-                var defaultTheme = hour >= 7 && hour < 18 ? 'light' : 'dark';
-                document.documentElement.dataset.theme = savedTheme || defaultTheme;
-                if (introSeen) {
-                    document.documentElement.dataset.introSeen = 'true';
-                }
-            } catch (error) {
-                document.documentElement.dataset.theme = new Date().getHours() >= 7 && new Date().getHours() < 18 ? 'light' : 'dark';
-            }
-        }());
-    </script>
+    <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
@@ -34,19 +19,19 @@
 
     <header class="topbar" aria-label="Site controls">
         <div class="brand-wrap">
-            <a class="logo brand-logo" href="index.html" aria-label="Alvi Ador portfolio" data-home-link>
+            <button class="logo brand-logo header-back" type="button" data-header-back aria-label="Go back">
                 <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M3 11.5L12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M5 10.8V20h14v-9.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M10 20v-5h4v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 18L9 12l6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-            </a>
+            </button>
         </div>
         <nav class="desktop-nav" aria-label="Primary navigation">
-            <a href="index.html#projects">Projects</a>
+            <a href="index.html">Home</a>
+            <a href="projects.html">Projects</a>
             <a href="index.html#security">Security</a>
-            <a href="index.html#about">About</a>
+            <a href="about.html">About</a>
             <a href="index.html#contact">Contact</a>
+            <a class="nav-login" href="demos/secure-auth/login.php" data-login-link>Login</a>
         </nav>
         <div class="header-social">
             <a class="icon-link" href="https://github.com/AlviAdor" target="_blank" rel="noreferrer" aria-label="GitHub">
@@ -73,10 +58,12 @@
     </header>
 
     <nav class="side-nav" id="site-nav" aria-label="Mobile navigation" data-nav>
-        <a href="index.html#projects">Projects</a>
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
         <a href="index.html#security">Security</a>
-        <a href="index.html#about">About</a>
+        <a href="about.html">About</a>
         <a href="index.html#contact">Contact</a>
+        <a href="demos/secure-auth/login.php" data-login-link>Login</a>
     </nav>
 
     <aside class="access-panel" data-access-panel aria-label="Accessibility settings">
@@ -101,25 +88,16 @@
             <input type="range" min="0" max="2" value="0" step="1" data-text-size>
         </label>
         <button class="reset-button" type="button" data-reset-access>Reset</button>
-                <script>
-                    (function () {
-                        try {
-                            var savedTheme = localStorage.getItem('portfolio_theme');
-                            var introSeen = localStorage.getItem('portfolio_intro_seen') === 'true';
-                            var hour = new Date().getHours();
-                            var defaultTheme = hour >= 7 && hour < 18 ? 'light' : 'dark';
-                            document.documentElement.dataset.theme = savedTheme || defaultTheme;
-                            if (introSeen) {
-                                document.documentElement.dataset.introSeen = 'true';
-                            }
-                        } catch (error) {
-                            document.documentElement.dataset.theme = new Date().getHours() >= 7 && new Date().getHours() < 18 ? 'light' : 'dark';
-                        }
-                    }());
-                </script>
     </aside>
 
     <main>
+        <section class="detail-grid section-screen">
+            <div class="section-intro">
+                <p class="section-label">Security Deep Dive</p>
+                <h2>Data integrity means your records stay accurate, always.</h2>
+            </div>
+            <div class="security-grid">
+                <article>
                     <span>Schema</span>
                     <h3>Strict design</h3>
                     <p>Each field has defined types, lengths, and validation rules. Malformed data is rejected.</p>
@@ -153,6 +131,34 @@
             </div>
         </section>
     </main>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="brand-mark-row"><span class="mark">AA</span> Alvi Ador</div>
+                <p>Security-first developer building verified systems -- secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
+            </div>
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <p class="footer-heading">Site</p>
+                <a href="index.html">Home</a>
+                <a href="projects.html">Projects</a>
+                <a href="index.html#security">Security</a>
+                <a href="about.html">About</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="demos/secure-auth/login.php" data-login-link>Login</a>
+            </nav>
+            <div class="footer-social">
+                <p class="footer-heading">Connect</p>
+                <a href="https://github.com/AlviAdor" target="_blank" rel="noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/alviador/" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="mailto:sarker.faizal2537@gmail.com">Email</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Alvi Ador. All rights reserved.</p>
+            <p>Built from scratch -- HTML, CSS, and JavaScript, no framework.</p>
+        </div>
+    </footer>
 
     <script src="assets/js/app.js"></script>
 </body>

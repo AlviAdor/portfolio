@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="A real PHP + MySQL app with zero-knowledge encrypted messaging, end-to-end encrypted chat, and hardened account security.">
+    <title>Secure Auth Demo | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,62 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Featured Build</p>
+                <h2>Secure Auth Demo: the app that backs up every claim on the Security pages.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Zero-knowledge</span>
+                    <h3>Encrypted contact inbox</h3>
+                    <p>Messages are RSA-OAEP + AES-256-GCM encrypted in the visitor's browser with your public key. The server stores only ciphertext -- there's no code path that could decrypt it even if I wanted to.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>End-to-end</span>
+                    <h3>Invite-to-chat</h3>
+                    <p>Invite a sender into a private chat; they get temporary credentials, set their own password, and get their own keypair generated client-side. Every message after that is encrypted twice (once per participant) before it leaves the browser.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Hardened</span>
+                    <h3>Real account security</h3>
+                    <p>Argon2id/bcrypt password hashing, CSRF tokens on every state-changing request, five-strikes rate limiting with lockout, and a CAPTCHA that's enforced server-side, not just hidden in the UI.</p>
                 </article>
+            </div>
+        </section>
+
+        <section class="gallery section-band">
+            <div class="section-intro">
+                <p class="section-label">Screenshots</p>
+                <h2>What it actually looks like.</h2>
+            </div>
+            <div class="screenshot-grid">
+                <figure>
+                    <img src="assets/img/screens/secure-auth-register.png" alt="Secure Auth Demo registration screen">
+                    <figcaption>Registration -- generates your keypair in-browser</figcaption>
+                </figure>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>Why this exists</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        The Security section of this site makes specific, checkable claims -- rate limiting, parameterized queries, session hardening, encrypted messaging. I got tired of security pages that just assert this stuff in prose with no way to verify it, so I built a real app to back it up instead of writing another paragraph about best practices.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        The part I'm most proud of is the contact form: your message is encrypted in your browser with the Web Crypto API before it's ever sent, using a keypair whose private half never leaves local storage, protected by a key derived from my own login password. I can open phpMyAdmin and stare at the raw database rows and see nothing but ciphertext. It only turns back into words in my browser, after I type my password.
+                    </p>
+                    <p>
+                        From there it extends into an actual end-to-end encrypted chat: I can invite whoever messaged me into a private conversation, and every message is encrypted client-side with a fresh key, specifically for both of us, before the server ever sees it. The server's job is just to store and relay bytes it can't read.
+                    </p>
+                    <p>
+                        This one is a working app, not a mockup -- you can register, log in, and use it right now using the Login link in the navigation.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="demos/secure-auth/register.php" target="_blank" rel="noreferrer" class="button primary">Create an Account</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

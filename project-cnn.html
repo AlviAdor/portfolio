@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="A convolutional neural network built and trained from scratch -- no pretrained backbone -- reaching 98%+ validation accuracy across three classes.">
+    <title>CNN on a Custom Dataset | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,63 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Featured Build</p>
+                <h2>A convolutional neural network, trained from scratch, not fine-tuned from a pretrained model.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Architecture</span>
+                    <h3>Built, not borrowed</h3>
+                    <p>The CNN architecture was built and trained from scratch for this assignment -- no pretrained backbone, so every weight in it was learned on this dataset specifically.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>Results</span>
+                    <h3>98%+ validation accuracy</h3>
+                    <p>Across three classes -- cat, dog, and wild animal faces -- the confusion matrix is close to diagonal: a small handful of misclassifications out of roughly 1,500 validation images.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Training</span>
+                    <h3>Watched, not assumed</h3>
+                    <p>Loss and accuracy were tracked across 15 epochs for both training and validation sets, which is what actually shows whether a model is learning or just memorizing.</p>
                 </article>
+            </div>
+        </section>
+
+        <section class="gallery section-band">
+            <div class="section-intro">
+                <p class="section-label">Screenshots</p>
+                <h2>What it actually looks like.</h2>
+            </div>
+            <div class="screenshot-grid">
+                <figure>
+                    <img src="assets/img/screens/cnn-confusion-matrix.png" alt="Confusion matrix showing CNN classification accuracy across three classes">
+                    <figcaption>Confusion matrix, 3-class validation set</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/img/screens/cnn-training-curves.png" alt="Loss and accuracy curves from training the custom-dataset CNN">
+                    <figcaption>Training vs. validation loss and accuracy, 15 epochs</figcaption>
+                </figure>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>What "from scratch" actually means here</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        For a Computer Vision and Pattern Recognition midterm assignment, the brief was to build and train a CNN on a custom dataset -- in this case, an AFHQ-style set of cat, dog, and wildlife face images. The constraint that mattered: no pretrained backbone. Every convolutional filter in the network learned its weights from this dataset alone, which is a meaningfully different (and harder) exercise than fine-tuning a ResNet.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        The training curves are the part I actually care about more than the final accuracy number -- training and validation loss both drop and plateau together without the validation curve diverging upward, which is what tells you the model generalized rather than memorized the training set.
+                    </p>
+                    <p>
+                        The confusion matrix backs that up: of roughly 500 validation images per class, the vast majority land on the diagonal, with the "wild" category showing slightly more confusion with "dog" than the other pairs -- which tracks, since several wild species in the set have dog-like facial structure.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="https://github.com/AlviAdor/CNN-Development-on-Custom-Dataset" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

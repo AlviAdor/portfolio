@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="A role-based hospital management system with normalized patient records, session integrity, and server-side validation on every write.">
+    <title>ANS Hospital Management System | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,66 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Featured Build</p>
+                <h2>ANS Hospital Management System, built for real patient data, not a toy CRUD demo.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Access</span>
+                    <h3>Role-based staff accounts</h3>
+                    <p>Doctors, admissions staff, and administrators each see a different dashboard, enforced server-side on every request, not just hidden in the UI.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>Integrity</span>
+                    <h3>Normalized patient records</h3>
+                    <p>Admissions, diagnoses, and billing live in a properly normalized schema, reached only through parameterized queries -- no string-built SQL anywhere in the codebase.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Validation</span>
+                    <h3>Server-side on every write</h3>
+                    <p>Every form -- registration, appointments, diagnosis entry, billing -- is re-validated server-side regardless of what the client already checked.</p>
                 </article>
+            </div>
+        </section>
+
+        <section class="gallery section-band">
+            <div class="section-intro">
+                <p class="section-label">Screenshots</p>
+                <h2>What it actually looks like.</h2>
+            </div>
+            <div class="screenshot-grid">
+                <figure>
+                    <img src="assets/img/screens/ans-hospital-banner.png" alt="ANS Hospital project banner">
+                    <figcaption>Project banner</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/img/screens/ans-hospital-login.png" alt="ANS Hospital Management System live login screen">
+                    <figcaption>Live login screen</figcaption>
+                </figure>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>Why I built it this way</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        This started as a university Web Technology project, built with a teammate, and I used it to practice something I kept reading about but hadn't actually done: an MVC architecture with real role separation, not just a login check sprinkled on top of a flat script.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        Staff accounts are split into roles with genuinely different capabilities -- a doctor can enter diagnoses and update patient records; front-desk staff can register patients and manage appointments; only an admin account can manage other accounts. That separation is enforced in the controller layer on every request, not just by hiding buttons in the view.
+                    </p>
+                    <p>
+                        The parts I spent the most time on weren't the CRUD screens -- they were the boring-sounding bits: session handling that survives a page refresh without leaking state between roles, a patient/admission/billing schema normalized enough that updating one record can't silently desync another, and consistent server-side validation so a malformed request from curl gets rejected exactly the same way a malformed form submission would.
+                    </p>
+                    <p>
+                        It's still a student project, not a HIPAA-compliant production system -- but the security habits in it (parameterized queries, role checks on every controller action, session integrity) are the same ones carried through into everything I've built since, including the Secure Auth Demo below.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="https://github.com/AlviAdor/WT_Fall-25-26-" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

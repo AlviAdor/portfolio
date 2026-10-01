@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Alvi Ador: Computer Science & Engineering student, security-minded developer. Education, skills, projects, and the specific challenges behind each one.">
+    <title>About | Alvi Ador</title>
+    <script src="assets/js/theme-init.js"></script>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="preloader" data-preloader>
+        <div class="loader-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <header class="topbar" aria-label="Site controls">
+        <div class="brand-wrap">
+            <button class="logo brand-logo header-back" type="button" data-header-back aria-label="Go back">
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M15 18L9 12l6-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+            <a href="index.html">Home</a>
+            <a href="projects.html">Projects</a>
+            <a href="index.html#security">Security</a>
+            <a href="about.html">About</a>
+            <a href="index.html#contact">Contact</a>
+            <a class="nav-login" href="demos/secure-auth/login.php" data-login-link>Login</a>
+        </nav>
+        <div class="header-social">
+            <a class="icon-link" href="https://github.com/AlviAdor" target="_blank" rel="noreferrer" aria-label="GitHub">
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.286-.01-1-.015-1.96-3.338.727-4.042-1.612-4.042-1.612-.546-1.387-1.333-1.757-1.333-1.757-1.09-.745.083-.73.083-.73 1.205.084 1.84 1.237 1.84 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.76-1.605-2.665-.305-5.466-1.335-5.466-5.93 0-1.31.467-2.381 1.235-3.221-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23a11.52 11.52 0 016 0c2.295-1.552 3.3-1.23 3.3-1.23.645 1.653.24 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.805 5.625-5.475 5.92.429.37.81 1.096.81 2.21 0 1.595-.015 2.877-.015 3.27 0 .315.21.693.825.576C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/></svg>
+            </a>
+            <a class="icon-link" href="https://www.linkedin.com/in/alviador/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8h4.48V24H.24zM8.24 8h4.3v2.13h.06c.6-1.14 2.06-2.34 4.23-2.34C22.05 7.79 24 10.03 24 14.08V24h-4.48v-8.01c0-1.91-.04-4.37-2.66-4.37-2.66 0-3.07 2.08-3.07 4.23V24H8.24V8z" fill="currentColor"/></svg>
+            </a>
+        </div>
+        <div class="topbar-actions">
+            <button class="icon-button" type="button" data-theme-toggle aria-label="Toggle theme">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="icon-button" type="button" data-panel-toggle aria-label="Open accessibility panel">
+                <span class="icon-dots" aria-hidden="true"></span>
+            </button>
+            <button class="menu-button" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation">
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="side-nav" id="site-nav" aria-label="Mobile navigation" data-nav>
+        <a href="index.html">Home</a>
+        <a href="projects.html">Projects</a>
+        <a href="index.html#security">Security</a>
+        <a href="about.html">About</a>
+        <a href="index.html#contact">Contact</a>
+        <a href="demos/secure-auth/login.php" data-login-link>Login</a>
+    </nav>
+
+    <aside class="access-panel" data-access-panel aria-label="Accessibility settings">
+        <div class="panel-header">
+            <strong>Display</strong>
+            <button type="button" data-panel-close>Close</button>
+        </div>
+        <label>
+            <input type="checkbox" data-readable-font>
+            Readable font
+        </label>
+        <label>
+            <input type="checkbox" data-reduced-motion>
+            Reduced motion
+        </label>
+        <label>
+            <input type="checkbox" data-high-contrast>
+            High contrast
+        </label>
+        <label>
+            Text size
+            <input type="range" min="0" max="2" value="0" step="1" data-text-size>
+        </label>
+        <button class="reset-button" type="button" data-reset-access>Reset</button>
+    </aside>
+
+    <main>
+        <section class="hero hero-compact hero-with-photo section-screen">
+            <div class="hero-copy">
+                <p class="greeting">About Me</p>
+                <h1>Alvi Ador. CSE student, security enthusiast, builder of things that have to actually work.</h1>
+                <p class="hero-subtitle">
+                    I'm a Computer Science &amp; Engineering student with a specific obsession: software that holds up when someone actually tries to break it, not just when a demo goes well. This page is the full version -- education, skills, what I've built, and what it actually took to build it.
+                </p>
+            </div>
+            <div class="about-photo-wrap">
+                <div class="about-photo-glow" aria-hidden="true"></div>
+                <figure class="about-photo">
+                    <img src="assets/img/alvi-ador.jpg" alt="Alvi Ador" width="1000" height="1246">
+                </figure>
+            </div>
+        </section>
+
+        <section class="about section-screen" aria-labelledby="who-title">
+            <div class="section-intro">
+                <p class="section-label">Who I Am</p>
+                <h2 id="who-title">Early-career, self-taught in most of the parts that matter, and allergic to claiming something works when I haven't checked.</h2>
+            </div>
+            <div class="about-layout">
+                <div class="about-copy">
+                    <p>
+                        I'm Alvi Ador, a Computer Science &amp; Engineering student. My coursework covers the usual ground -- data structures, software engineering, computer vision -- but most of what I can actually do came from building things past the point where the assignment technically ended: finishing the hospital system's role-based access after the grade was already in, going back to add a CAPTCHA to a login form nobody asked for, rewriting an encryption flow three times until it was actually correct instead of just compiling.
+                    </p>
+                    <p>
+                        I care about security specifically because it's the field where "looks like it works" and "actually works" are most dangerously far apart. A broken button is obvious. A broken access control check is invisible until someone finds it -- and by then it's not your problem to fix quietly anymore. That gap is what pulled me from "full-stack student" toward "security-minded developer," and it's the lens I now run every project through.
+                    </p>
+                    <p>
+                        I'm based in Bangladesh, early in my career, and genuinely still excited by the parts of this work that are supposed to get tedious -- reading a spec instead of a tutorial, re-checking an edge case for the fifth time, asking "but what if someone sends something I didn't expect" one more time than feels necessary.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="method section-band" aria-labelledby="skills-title">
+            <div class="section-intro">
+                <p class="section-label">Skills</p>
+                <h2 id="skills-title">What I actually use, grouped by what it's for.</h2>
+            </div>
+            <div class="method-grid">
+                <article>
+                    <span>Security</span>
+                    <p>Threat modeling, authentication &amp; session handling, input validation, applied cryptography (RSA, AES-GCM), penetration testing fundamentals, CVE research.</p>
+                </article>
+                <article>
+                    <span>Languages</span>
+                    <p>PHP, Python, Java, C++, C#, JavaScript, SQL -- comfortable moving between backend, scripting, and systems-level work without a single "main" language.</p>
+                </article>
+                <article>
+                    <span>Backend &amp; Data</span>
+                    <p>MySQL, MVC architecture, session management, parameterized queries, RESTful JSON APIs, schema design that survives more than one feature.</p>
+                </article>
+                <article>
+                    <span>Applied ML</span>
+                    <p>Convolutional neural networks built from scratch (PyTorch/Python), dataset preparation, training-curve analysis, confusion-matrix-level evaluation, not just calling a library.</p>
+                </article>
+                <article>
+                    <span>Tools &amp; Practice</span>
+                    <p>Git, Jupyter, Wireshark, Nmap, Metasploit, clean commit discipline, documentation that explains why, not just what.</p>
+                </article>
+                <article>
+                    <span>Graphics</span>
+                    <p>OpenGL and FreeGLUT fundamentals -- transformation matrices, camera systems, lighting -- built without a game engine between me and the math.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="security section-screen" aria-labelledby="achievements-title">
+            <div class="section-intro">
+                <p class="section-label">What I've Built</p>
+                <h2 id="achievements-title">Not a skills list -- specific things that exist, run, and do what they claim to.</h2>
+            </div>
+            <div class="security-grid">
+                <article>
+                    <span>Security</span>
+                    <h3>Root access, documented end to end</h3>
+                    <p>Took an unknown host in an isolated network from zero information to a root shell, using a real CVE-backed exploit -- recon, exploitation, and evidence, not a tutorial retyped.</p>
+                </article>
+                <article>
+                    <span>Cryptography</span>
+                    <h3>Zero-knowledge encryption, actually zero-knowledge</h3>
+                    <p>Designed and built a contact and chat system where the server genuinely cannot decrypt a message -- RSA-OAEP and AES-256-GCM, generated and run entirely client-side via the Web Crypto API.</p>
+                </article>
+                <article>
+                    <span>Machine Learning</span>
+                    <h3>A CNN with no pretrained shortcuts</h3>
+                    <p>Trained a convolutional network from scratch -- no pretrained backbone -- to 98%+ validation accuracy across three classes, and understood every layer well enough to explain the training curves.</p>
+                </article>
+                <article>
+                    <span>Full-Stack</span>
+                    <h3>A hospital system with real role separation</h3>
+                    <p>MVC architecture, normalized patient records, parameterized queries throughout, and role checks enforced server-side on every request -- not hidden buttons in the UI.</p>
+                </article>
+                <article>
+                    <span>Graphics</span>
+                    <h3>A monastery, rendered from first principles</h3>
+                    <p>Recreated the historic Somapura Mahavihara directly on OpenGL and FreeGLUT -- no game engine between me and the rendering pipeline.</p>
+                </article>
+                <article>
+                    <span>Applications</span>
+                    <h3>Games and desktop tools people can actually use</h3>
+                    <p>A five-mode arcade game with a full settings and progression system, and a desktop inventory manager built around a real small-shop workflow, password-protected deletion included.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="about section-screen" aria-labelledby="challenges-title">
+            <div class="section-intro">
+                <p class="section-label">What I've Had to Push Through</p>
+                <h2 id="challenges-title">The parts that didn't work on the first, second, or fifth try.</h2>
+            </div>
+            <div class="about-layout">
+                <div class="about-copy">
+                    <p>
+                        <strong>Cryptography that actually had to be correct.</strong> Reading about RSA-OAEP and AES-256-GCM is one thing. Implementing a flow where a browser wraps a one-time key with a public key, and getting the padding, the IV handling, and the key derivation all correct enough that it actually decrypts back to the original message -- that took several wrong attempts that silently produced garbage instead of plaintext, and a lot of reading the actual Web Crypto API spec instead of the first Stack Overflow answer.
+                    </p>
+                    <p>
+                        <strong>Learning a rendering pipeline with no safety net.</strong> Somapura Mahavihara was my first real computer graphics project, built directly on OpenGL instead of a game engine. Transformation matrices and camera math that look clean in a textbook are a lot less clean when your scene renders upside down, or a light source is technically correct and still makes everything look wrong. There's no abstraction layer to blame when that happens -- just you and the math.
+                    </p>
+                    <p>
+                        <strong>A penetration test with no hints.</strong> The security assessment gave me an IP address and nothing else. No known vulnerability to confirm, no walkthrough to follow -- just Nmap, a lot of reading about what a specific outdated FTP daemon actually was once I found it, and the slower, less glamorous work of confirming an exploit would actually work before trying it for real.
+                    </p>
+                    <p>
+                        <strong>Training a model that had to generalize, not memorize.</strong> It's easy to get a CNN's training accuracy near 100% -- that's usually a sign something's wrong. Getting training and validation curves to track each other instead of diverging meant actually understanding regularization and data splits, not just running more epochs and hoping.
+                    </p>
+                    <p>
+                        <strong>Balancing coursework with projects nobody assigned.</strong> Most of what's above wasn't required for a grade. Building it anyway, on top of a full course load, meant a lot of late nights deciding a side project mattered more than finishing early -- a trade I'd make again every time.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="method section-band" aria-labelledby="approach-title">
+            <div class="section-intro">
+                <p class="section-label">How I Work</p>
+                <h2 id="approach-title">Four habits that show up in everything I build.</h2>
+            </div>
+            <div class="method-grid">
+                <article>
+                    <span>Question First</span>
+                    <p>Before writing a feature, I ask what happens when someone tries to misuse it. That question shapes the design, not a review that happens after.</p>
+                </article>
+                <article>
+                    <span>Build It Real</span>
+                    <p>If I claim something works, it has to actually run. I'd rather ship one real, working thing than describe ten hypothetical ones.</p>
+                </article>
+                <article>
+                    <span>Read the Spec</span>
+                    <p>Tutorials get you started. Getting cryptography, session handling, or a rendering pipeline actually correct means reading the real documentation, not just the first example that compiles.</p>
+                </article>
+                <article>
+                    <span>Finish the Boring Part</span>
+                    <p>Error handling, input validation, the fifth edge case nobody asks about -- that's where most of my actual time goes, because that's where most real bugs live.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="about section-screen" aria-labelledby="whats-next-title">
+            <div class="section-intro">
+                <p class="section-label">What's Next</p>
+                <h2 id="whats-next-title">Early-career, and looking for where to point this next.</h2>
+            </div>
+            <div class="about-layout">
+                <div class="about-copy">
+                    <p>
+                        I'm open to internships, junior roles, and collaborations in both security and software -- and increasingly drawn to research specifically. Work like the isolated-network penetration test and training a CNN from scratch wasn't coursework I tolerated for a grade; it's the kind of work I'd keep doing without one. I'm actively looking for research opportunities at the intersection of applied security and machine learning -- an undergraduate research assistantship, a lab collaboration, a publication-driven project. I'm not picky about the label as long as the work is real.
+                    </p>
+                    <p>
+                        If any of that overlaps with what you're building, I'd like to hear from you.
+                    </p>
+                    <div class="about-actions">
+                        <a class="button primary" href="index.html#contact">Get in Touch</a>
+                        <a class="button secondary" href="projects.html">See My Projects</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="brand-mark-row"><span class="mark">AA</span> Alvi Ador</div>
+                <p>Security-first developer building verified systems -- secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
+            </div>
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <p class="footer-heading">Site</p>
+                <a href="index.html">Home</a>
+                <a href="projects.html">Projects</a>
+                <a href="index.html#security">Security</a>
+                <a href="about.html">About</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="demos/secure-auth/login.php" data-login-link>Login</a>
+            </nav>
+            <div class="footer-social">
+                <p class="footer-heading">Connect</p>
+                <a href="https://github.com/AlviAdor" target="_blank" rel="noreferrer">GitHub</a>
+                <a href="https://www.linkedin.com/in/alviador/" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a href="mailto:sarker.faizal2537@gmail.com">Email</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Alvi Ador. All rights reserved.</p>
+            <p>Built from scratch -- HTML, CSS, and JavaScript, no framework.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

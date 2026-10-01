@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="A hands-on penetration test of an unknown host in a sandboxed virtual network: recon, a real CVE-backed exploit, and root access, fully documented.">
+    <title>Isolated Network Security Assessment | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,66 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Featured Build</p>
+                <h2>A full penetration test, from zero information to root, documented end to end.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Recon</span>
+                    <h3>No prior information</h3>
+                    <p>Given nothing but an IP in an isolated virtual network, Nmap enumeration found three open ports: FTP, SSH, and HTTP -- the entire starting point for everything that followed.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>Exploitation</span>
+                    <h3>A real backdoor, really used</h3>
+                    <p>The FTP service identified as ProFTPD 1.3.3c, a version with a known backdoor command-execution vulnerability. Metasploit's matching module got a shell -- confirmed instantly with whoami returning root.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Evidence</span>
+                    <h3>Every step captured, not claimed</h3>
+                    <p>Wireshark packet capture, exploit output, and command history are all in the report -- this is a walkthrough with proof at each step, not a plausible-sounding summary.</p>
                 </article>
+            </div>
+        </section>
+
+        <section class="gallery section-band">
+            <div class="section-intro">
+                <p class="section-label">Screenshots</p>
+                <h2>What it actually looks like.</h2>
+            </div>
+            <div class="screenshot-grid">
+                <figure>
+                    <img src="assets/img/screens/security-assessment-nmap.png" alt="Nmap scan from the isolated network security assessment">
+                    <figcaption>Initial Nmap recon</figcaption>
+                </figure>
+                <figure>
+                    <img src="assets/img/screens/security-assessment-rootshell.png" alt="Metasploit session showing root access gained on the isolated target">
+                    <figcaption>Root shell via the ProFTPD backdoor exploit</figcaption>
+                </figure>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>What the assessment actually covered</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        This was a course assignment with a simple premise: here's an IP address on an isolated virtual network, here's a Kali Linux attacker box, find out everything you can and see how far you can get. No hints, no prior knowledge of the target.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        Nmap's initial scan found three open ports -- FTP, SSH, HTTP -- and a service/version scan identified the FTP daemon as ProFTPD 1.3.3c, a version with a well-documented backdoor vulnerability (CVE-2011-4130-adjacent command execution via a crafted response). Metasploit had a matching module; running it opened a reverse shell, and whoami confirmed root access on the first attempt.
+                    </p>
+                    <p>
+                        From there the assessment went further than just "got a shell": packet capture with Wireshark during an FTP session recovered plaintext credentials, which led to cracking a non-system account's password to demonstrate credential reuse risk, and the final report closes with concrete remediation -- patch the outdated FTP service, apply network segmentation, and stop reusing passwords across accounts.
+                    </p>
+                    <p>
+                        The value of this project for me wasn't "I ran a tool and it worked" -- it was connecting the dots: recon tells you what's running, version identification tells you what's vulnerable, and exploitation only works because the first two steps were done properly. That's the mindset that shows up everywhere else in how I build and secure software now.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="https://github.com/AlviAdor/Security-Assessment-of-an-Unknown-System-in-an-Isolated-Virtual-Network" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

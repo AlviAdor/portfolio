@@ -1,0 +1,34 @@
+# Force HTTPS -- but only for a real hostname. Localhost/127.0.0.1 is excluded
+# on purpose: local XAMPP development has no trusted certificate (and getting
+# one there is a hassle not worth forcing on every page load while working),
+# so forcing the redirect there just replaces every page with a browser
+# security interstitial instead. Any real domain this site is served from
+# still gets redirected to HTTPS unconditionally.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# Modern security headers for the static portfolio pages only -- scoped to
+# .html so this never touches demos/secure-auth/, which sends its own
+# per-request CSP with nonces from PHP (see app/Core/SecurityHeaders.php).
+# Without this scope, Apache stamped a second, nonce-less CSP onto every PHP
+# response there too, alongside -- not replacing -- the correct one.
+<IfModule mod_headers.c>
+    <FilesMatch "\.html$">
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set X-Frame-Options "DENY"
+        Header always set Referrer-Policy "strict-origin-when-cross-origin"
+        Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+        Header always set Cross-Origin-Opener-Policy "same-origin"
+
+        # No inline <script>/<style> anywhere on these pages -- every script is an
+        # external same-origin file -- so this runs with no 'unsafe-inline' at all.
+        Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+
+        # Only takes effect once the site is actually served over HTTPS.
+        Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+    </FilesMatch>
+</IfModule>

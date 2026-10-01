@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="A Java desktop app with a GUI login and registration flow, built on OOP principles with a modular, package-per-concern structure.">
+    <title>Tourismo | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -93,39 +93,46 @@
     <main>
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Project</p>
+                <h2>Tourismo: a Java desktop app built to practice OOP, not just use it.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
+                    <span>Flow</span>
+                    <h3>Login, registration, homepage</h3>
+                    <p>A complete account flow -- authenticate existing users, register new ones, land on a central homepage -- all as distinct, testable modules.</p>
                 </article>
                 <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
+                    <span>Content</span>
+                    <h3>Eight article modules</h3>
+                    <p>A modular article system with eight separate content modules, each its own class, demonstrating composition over one monolithic content blob.</p>
                 </article>
                 <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
+                    <span>Structure</span>
+                    <h3>Package-per-concern</h3>
+                    <p>Separate packages for Articles, Homepage, LoginClass, and Registration -- the kind of structure you'd want in something bigger, practiced at a scale you can actually hold in your head.</p>
                 </article>
             </div>
         </section>
 
         <section class="about section-screen">
             <div class="section-intro">
-                <h2>The Commitment</h2>
+                <h2>Why this one is about structure, not features</h2>
             </div>
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        Tourismo is a Java desktop application with a login, registration, and article-browsing flow -- functionally modest on purpose. The point of building it was practicing object-oriented structure: separate packages for login, registration, the homepage, and the article content, rather than one script that does everything.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <p>
+                        Eight article modules exist as eight separate classes rather than eight rows in a database or eight if-branches in one method -- a deliberate, maybe slightly over-engineered-for-its-size choice, because the assignment was about demonstrating OOP principles, and a flat structure wouldn't have shown that.
+                    </p>
+                    <p>
+                        It's a smaller project than the others here, and I kept it in the list anyway because it's a clean example of package-per-concern structure applied consistently, which is a habit that scales a lot better than the projects where I learned it.
+                    </p>
+                    <div class="about-actions project-links">
+                        <a href="https://github.com/AlviAdor/Tourismo" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
+                        <a href="projects.html" data-skip-intro class="button secondary">Back to Projects</a>
                     </div>
                 </div>
             </div>

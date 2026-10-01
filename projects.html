@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Input validation security approach - Alvi Ador's portfolio.">
-    <title>Validation | Alvi Ador</title>
+    <meta name="description" content="Every project Alvi Ador has built, each with a full writeup covering approach, stack, and implementation details.">
+    <title>Projects | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
@@ -91,43 +91,119 @@
     </aside>
 
     <main>
-        <section class="detail-grid section-screen">
+        <section class="projects section-screen" id="projects-top" aria-labelledby="projects-title">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Validation is the barrier between your input and my database.</h2>
+                <p class="section-label">Projects</p>
+                <h2 id="projects-title">Everything I've built and learned from. Each one links through to a full writeup -- approach, stack, and what actually went into it.</h2>
             </div>
-            <div class="security-grid">
-                <article>
-                    <span>Server-side</span>
-                    <h3>Fortress verification</h3>
-                    <p>Every input is re-checked, sanitized, and escaped before any database operation.</p>
-                </article>
-                <article>
-                    <span>Injection</span>
-                    <h3>Parameterized queries</h3>
-                    <p>Injection attacks fail because user input is never mixed with SQL commands.</p>
-                </article>
-                <article>
-                    <span>XSS</span>
-                    <h3>Character escaping</h3>
-                    <p>Special characters are escaped; scripts cannot execute in stored or displayed data.</p>
-                </article>
-            </div>
-        </section>
 
-        <section class="about section-screen">
-            <div class="section-intro">
-                <h2>The Commitment</h2>
-            </div>
-            <div class="about-layout">
-                <div class="about-copy">
+            <article class="featured-project">
+                <div class="project-copy">
+                    <p class="project-kicker">Featured build</p>
+                    <h3>ANS Hospital Management System</h3>
                     <p>
-                        Validation is not a courtesy—it is a barrier. I validate to protect your data, not just to make the form feel nice. Every field is questioned. Every submission is tested.
+                        A verifiable, role-based hospital system handling sensitive patient data. Built with session verification,
+                        encrypted credentials, and rigorous input validation. MVC architecture ensures maintainability and compliance.
                     </p>
-                    <div class="about-actions">
-                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                    <ul>
+                        <li>Authentication & Authorization: Role-based staff access with session integrity checks</li>
+                        <li>Data Integrity: Patient records protected by normalized schema and parameterized queries</li>
+                        <li>Validation Layer: Server-side checks prevent injection, malformed input, and unauthorized updates</li>
+                    </ul>
+                    <div class="project-links">
+                        <a href="project-ans-hospital.html">Full Writeup</a>
+                        <a href="https://github.com/AlviAdor/WT_Fall-25-26-" target="_blank" rel="noreferrer">GitHub Repo</a>
                     </div>
                 </div>
+                <figure class="project-media">
+                    <img src="assets/img/screens/ans-hospital-banner.png" alt="ANS Hospital project banner">
+                </figure>
+            </article>
+
+            <div class="project-grid">
+                <article class="project-card">
+                    <figure>
+                        <img src="assets/img/screens/secure-auth-register.png" alt="Secure Auth Demo registration screen, running with a live PHP and MySQL backend">
+                    </figure>
+                    <div>
+                        <span>PHP / MySQL</span>
+                        <h3>Secure Auth Demo</h3>
+                        <p>Database-backed registration and login with bcrypt/Argon2id hashing, CSRF protection, and login rate-limiting. Also powers this site's contact form: your message is RSA + AES-256-GCM encrypted in your browser and only my own login can decrypt it -- with an end-to-end encrypted invite-to-chat flow on top.</p>
+                        <a href="project-secure-auth-demo.html">Full Writeup</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure>
+                        <img src="assets/img/screens/dxball-menu.png" alt="DX-Ball main menu with game modes and best scores">
+                    </figure>
+                    <div>
+                        <span>Python</span>
+                        <h3>DX-Ball</h3>
+                        <p>Arcade paddle game with five distinct modes, a boost/combo system, score tracking, lives, and fully configurable controls.</p>
+                        <a href="project-dxball.html">Full Writeup</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure class="generated-preview shop">
+                        <span>MS</span>
+                    </figure>
+                    <div>
+                        <span>C#</span>
+                        <h3>Mobile Shop Management</h3>
+                        <p>Windows desktop app for adding phones, managing customers, tracking stock, viewing records, and password-protected deletion.</p>
+                        <a href="project-mobile-shop.html">Full Writeup</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure>
+                        <img src="assets/img/screens/security-assessment-rootshell.png" alt="Metasploit session showing root access gained on the isolated target">
+                    </figure>
+                    <div>
+                        <span>Security</span>
+                        <h3>Isolated Network Security Assessment</h3>
+                        <p>Hands-on penetration test of an unknown host inside a sandboxed virtual network: recon, a real CVE-backed exploit, and root access, fully documented.</p>
+                        <a href="project-security-assessment.html">Full Writeup</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure class="generated-preview shop">
+                        <span>SM</span>
+                    </figure>
+                    <div>
+                        <span>C++ / OpenGL</span>
+                        <h3>Somapura Mahavihara</h3>
+                        <p>Computer graphics recreation of the ancient monastery, built directly on OpenGL and FreeGLUT: interchangeable scenes, keyboard-driven camera controls, and audio support.</p>
+                        <a href="project-somapura.html">Full Writeup</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure>
+                        <img src="assets/img/screens/cnn-confusion-matrix.png" alt="Confusion matrix showing CNN classification accuracy across three classes">
+                    </figure>
+                    <div>
+                        <span>Python / Jupyter</span>
+                        <h3>CNN on a Custom Dataset</h3>
+                        <p>Convolutional neural network built and trained from scratch -- no pretrained backbone -- reaching 98%+ validation accuracy across three classes.</p>
+                        <a href="project-cnn.html">Full Writeup</a>
+                    </div>
+                </article>
+
+                <article class="project-card code-card">
+                    <figure class="generated-preview shop">
+                        <span>TO</span>
+                    </figure>
+                    <div>
+                        <span>Java</span>
+                        <h3>Tourismo</h3>
+                        <p>Java desktop app with a GUI login and registration flow, built on OOP principles with a modular, package-per-concern structure.</p>
+                        <a href="project-tourismo.html">Full Writeup</a>
+                    </div>
+                </article>
             </div>
         </section>
     </main>
