@@ -210,7 +210,7 @@ class AuthController
                     $hash = hash_password($password);
                     User::completeSetup((int)$user['id'], $username, $gender, $hash, $publicKey);
 
-                    header('Location: chat-list.php?welcome=1');
+                    header('Location: threads.php?welcome=1');
                     exit;
                 }
             }

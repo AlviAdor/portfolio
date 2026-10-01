@@ -475,6 +475,64 @@ function loadCryptoClient() {
     return cryptoClientLoad;
 }
 
+// When the secure-auth backend lives on a different origin than this page (the
+// real deployment target), a direct cross-origin fetch() can get blocked by
+// that host's own edge/bot-protection layer before this app's CORS config is
+// even considered -- see demos/secure-auth/DEPLOY.md section H. Talking to a
+// same-origin bridge page via postMessage sidesteps that entirely: postMessage
+// isn't subject to CORS, and the bridge's own fetch() to its API is
+// same-origin, so none of this applies on that side.
+const BRIDGE_ORIGIN = (() => {
+    try {
+        return new URL(SECURE_MESSAGING_BASE, location.href).origin;
+    } catch {
+        return location.origin;
+    }
+})();
+const IS_CROSS_ORIGIN_BACKEND = BRIDGE_ORIGIN !== location.origin;
+
+let bridgeFramePromise = null;
+function getBridgeFrame() {
+    if (bridgeFramePromise) return bridgeFramePromise;
+    bridgeFramePromise = new Promise((resolve) => {
+        const iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.setAttribute("aria-hidden", "true");
+        function onReady(event) {
+            if (event.origin !== BRIDGE_ORIGIN || !event.data?.bridgeReady) return;
+            window.removeEventListener("message", onReady);
+            resolve(iframe);
+        }
+        window.addEventListener("message", onReady);
+        // Don't hang forever if the bridge never loads (network issue, host down).
+        setTimeout(() => { window.removeEventListener("message", onReady); resolve(iframe); }, 8000);
+        iframe.src = `${SECURE_MESSAGING_BASE}bridge.php`;
+        document.body.appendChild(iframe);
+    });
+    return bridgeFramePromise;
+}
+
+let bridgeRequestSeq = 0;
+async function bridgeRequest(type, payload) {
+    const iframe = await getBridgeFrame();
+    const requestId = `req_${++bridgeRequestSeq}_${Date.now()}`;
+    return new Promise((resolve) => {
+        const timeout = setTimeout(() => {
+            window.removeEventListener("message", onMessage);
+            resolve({ ok: false, error: "Bridge request timed out." });
+        }, 10000);
+        function onMessage(event) {
+            if (event.origin !== BRIDGE_ORIGIN) return;
+            if (event.data?.requestId !== requestId) return;
+            clearTimeout(timeout);
+            window.removeEventListener("message", onMessage);
+            resolve(event.data.result);
+        }
+        window.addEventListener("message", onMessage);
+        iframe.contentWindow.postMessage({ requestId, type, payload }, BRIDGE_ORIGIN);
+    });
+}
+
 // Encrypts the message in-browser with the admin's public key (RSA-OAEP wraps a
 // one-time AES-256-GCM key) and submits only ciphertext. Returns true if the
 // encrypted send succeeded, false if it quietly fell back (e.g. demo backend not
@@ -485,22 +543,25 @@ async function sendEncryptedContactMessage(name, email, message) {
         const loaded = await loadCryptoClient();
         if (!loaded || typeof SecureCrypto === "undefined") return false;
 
-        const keyRes = await fetch(`${SECURE_MESSAGING_BASE}api.php?action=admin_public_key`);
-        const keyData = await keyRes.json();
+        const keyData = IS_CROSS_ORIGIN_BACKEND
+            ? await bridgeRequest("admin_public_key")
+            : await fetch(`${SECURE_MESSAGING_BASE}api.php?action=admin_public_key`).then((r) => r.json());
         if (!keyData.ok) return false;
 
         const enc = await SecureCrypto.encryptForRecipient(message, keyData.publicKey);
-        const body = new URLSearchParams({
+        const payload = {
             name, email,
             ciphertext: enc.ciphertext,
             iv: enc.iv,
             wrappedKey: enc.wrappedKey,
-        });
-        const sendRes = await fetch(`${SECURE_MESSAGING_BASE}api.php?action=contact_submit`, {
-            method: "POST",
-            body,
-        });
-        const sendData = await sendRes.json();
+        };
+
+        const sendData = IS_CROSS_ORIGIN_BACKEND
+            ? await bridgeRequest("contact_submit", payload)
+            : await fetch(`${SECURE_MESSAGING_BASE}api.php?action=contact_submit`, {
+                  method: "POST",
+                  body: new URLSearchParams(payload),
+              }).then((r) => r.json());
         return !!sendData.ok;
     } catch (error) {
         return false;

@@ -14,13 +14,13 @@ class ProfileController
         $targetId = (int)($_GET['user'] ?? 0);
 
         if ($targetId !== $myId && !ChatThread::sharedThreadExists($myId, $targetId)) {
-            header('Location: chat-list.php');
+            header('Location: threads.php');
             exit;
         }
 
         $profile = User::profileFields($targetId);
         if (!$profile) {
-            header('Location: chat-list.php');
+            header('Location: threads.php');
             exit;
         }
 

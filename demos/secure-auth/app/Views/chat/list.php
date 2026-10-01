@@ -46,7 +46,7 @@ async function load() {
 
         const row = document.createElement('a');
         row.className = 'thread-row';
-        row.href = `chat.php?thread=${t.id}`;
+        row.href = `thread.php?thread=${t.id}`;
 
         const peer = document.createElement('span');
         peer.className = 'peer';

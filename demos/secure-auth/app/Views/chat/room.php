@@ -10,7 +10,7 @@
 <header class="topbar">
     <div class="brand"><span class="mark">SA</span> Secure Auth Demo</div>
     <div class="topbar-links">
-        <a class="action-link" href="chat-list.php">&larr; All chats</a>
+        <a class="action-link" href="threads.php">&larr; All chats</a>
     </div>
 </header>
 

@@ -66,8 +66,15 @@ lands at `htdocs/register.php`, not `htdocs/secure-auth/register.php`.
 No environment variables here -- InfinityFree has nowhere to set them, so this app falls back
 to a plain config file for exactly this situation (see `app/Core/Config.php`).
 
-1. In `config/`, create `config.local.php` -- either edit `config.local.php.example` locally
-   and re-upload it renamed, or create it directly in InfinityFree's File Manager. Fill in:
+1. In `config/`, create `config.local.php` -- the safest way is to copy
+   `config.local.php.example` (it's already valid PHP, already in the right folder) and edit
+   the copy, rather than retyping this from scratch. The file must contain *only* what's shown
+   below the line -- starting with `<?php` and ending with the closing `];` -- with no
+   surrounding ` ```php ` fence; those triple backticks are Markdown formatting for this
+   document, not part of the file. If you paste this block in, delete the fence lines, or PHP
+   will fail to parse the file with a syntax error on line 1 (which, from a browser, looks
+   exactly like "Something went wrong" with no hint why -- a mistake worth flagging because
+   it's an easy one to make copying from here):
    ```php
    <?php
    return [
@@ -136,6 +143,50 @@ live portfolio and test the contact form end to end -- that's the one feature th
 cross-origin CORS actually being configured correctly, so it's the real test that steps D and G
 both landed.
 
+## H. Two free-tier quirks I actually hit
+
+Both of these are the hosting network's own edge layer, not this app's PHP code -- found by
+deploying to `alviador.freehosting.dev`, a white-label brand on the same network as
+InfinityFree (its error pages are served from `errors.infinityfree.net`, which gives it away).
+If you're on a different free host, these may not apply at all -- but if something that looks
+exactly like this happens, this is almost certainly why.
+
+**Any URL path containing the word "chat" gets a flat 403, before PHP ever runs.** Not a typo,
+not a permissions issue -- `chat.php`, `chat-list.php`, even a nonexistent `chatlist.php`, all
+blocked identically at the edge. This is a keyword-based WAF rule, presumably aimed at the
+shoutbox-spam abuse that's common on free hosting, that doesn't know or care this is a
+legitimate app. There's no setting on the free tier to exempt a path from it. The fix was to
+stop fighting it: the chat pages are named `threads.php` and `thread.php` here (matching the
+`ChatThread` model's own terminology), not `chat*.php`, specifically so the word never appears
+in a URL this host sees.
+
+**Cross-origin `fetch()` calls can fail even with CORS configured correctly.** This host serves
+a JavaScript "prove you're a browser" challenge to requests it hasn't seen before -- fine for a
+normal page load (the browser runs the JS, gets a cookie, moves on), but `fetch()` from another
+origin doesn't execute that JS; it just sees the challenge page's raw HTML with no
+`Access-Control-Allow-Origin` header, and the browser blocks it as a CORS failure --
+indistinguishable from this app's CORS actually being misconfigured, even though it isn't. This
+hit `admin_public_key` and `contact_submit`, the two endpoints the portfolio's contact form
+depends on, every single time I tested it, including from a browser that had already visited
+the API host directly.
+
+There's no server setting that fixes this -- the edge layer intercepts the request before
+`api.php` ever runs, so nothing in `ApiController` reacting to it would help. The fix is
+`bridge.php`: instead of the portfolio calling `api.php` directly cross-origin, it loads
+`bridge.php` in a hidden iframe and talks to it with `postMessage`, which isn't subject to CORS
+at all (it's a browser messaging API, not an HTTP request the edge layer can intercept).
+`bridge.php` then makes its own call to `api.php` -- same-origin, since both live on this
+server -- which the bot-check has no reason to touch. See `assets/js/app.js`
+(`IS_CROSS_ORIGIN_BACKEND`, `bridgeRequest()`) for the portfolio side. This is automatic: it
+only activates when `secure-messaging-base` points at a different origin than the page it's
+running on, so local same-origin testing is untouched.
+
+`bridge.php` only answers messages from the exact origin in `SAD_ALLOWED_ORIGIN` -- the same
+setting CORS already uses -- so if this still isn't working, that's the first thing to check:
+open the browser console on the live portfolio and confirm there's no `event.origin` mismatch
+logged, and that `SAD_ALLOWED_ORIGIN` in `config.local.php` is exactly `https://alviador.github.io`
+with no trailing slash.
+
 ## Checklist
 
 - [ ] InfinityFree account created, subdomain active
@@ -151,7 +202,20 @@ both landed.
 
 Every page here has a built-in safety net for exactly this situation: an uncaught error (wrong
 DB credentials, unreachable host, anything) renders a plain styled error page instead of a
-blank white screen -- see the `set_exception_handler()` in `config/bootstrap.php`. If you land
-on that, it's almost always step B or D: the database isn't reachable, or `config.local.php`
-has a typo. InfinityFree's control panel also has an error log viewer under **Error Logs** if
-the on-page message isn't enough.
+blank white screen -- see the `set_exception_handler()` in `config/bootstrap.php`. The message
+tells you which kind it is:
+
+- **"The database isn't reachable right now"** -- step B or D: wrong `SAD_DB_HOST`/`SAD_DB_NAME`/
+  `SAD_DB_USER`/`SAD_DB_PASS` in `config.local.php`, or `db/setup.sql` was never imported.
+- **"An unexpected error occurred"** (the generic one) -- usually something in `config.local.php`
+  itself before the database is even reached. The single most common cause: the Markdown code
+  fence (` ```php `) from step D got copied into the file along with the real content, which
+  is a PHP syntax error on line 1. Open the file and confirm the very first line is `<?php`,
+  nothing before it. A missing PHP extension (rare on InfinityFree, more likely on a stricter
+  host) can also land here -- this app includes a fallback for a missing `mbstring` extension
+  specifically (`app/Core/Compat.php`), since that's the one most free hosts occasionally ship
+  without.
+
+Checking the actual cause instead of guessing: InfinityFree's control panel has an error log
+viewer under **Error Logs** -- every uncaught error is logged there with the real exception
+class and message, which is the fastest way to know which of the above you're looking at.

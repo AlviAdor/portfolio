@@ -5,6 +5,7 @@ declare(strict_types=1);
 // "booted" so app/ files can refuse to run if someone requests them directly.
 define('SAD_APP', true);
 
+require __DIR__ . '/../app/Core/Compat.php';
 require __DIR__ . '/../app/Core/Config.php';
 require __DIR__ . '/../app/Core/SecurityHeaders.php';
 require __DIR__ . '/../app/Core/Database.php';

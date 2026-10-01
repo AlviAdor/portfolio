@@ -11,7 +11,7 @@
     <div class="brand"><span class="mark">SA</span> Secure Auth Demo</div>
     <div class="topbar-links">
         <a class="action-link" href="../dashboard.php">Dashboard</a>
-        <a class="action-link" href="../chat-list.php">Secure Chats</a>
+        <a class="action-link" href="../threads.php">Secure Chats</a>
         <form method="post" action="../logout.php" class="inline-form"><button class="action-link" type="submit">Sign out</button></form>
     </div>
 </header>

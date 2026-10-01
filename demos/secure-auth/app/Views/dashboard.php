@@ -25,7 +25,7 @@
         <?php if ($isAdmin): ?>
             <a class="action-link" href="admin/inbox.php">Secure Inbox &rarr;</a>
         <?php endif; ?>
-        <a class="action-link" href="chat-list.php">Secure Chats &rarr;</a>
+        <a class="action-link" href="threads.php">Secure Chats &rarr;</a>
     </div>
 
     <p class="subtitle mt-section">

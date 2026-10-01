@@ -221,10 +221,16 @@ and every link on the main site keep working exactly as before.
 ```
 register.php, login.php, logout.php, set-password.php   Entry points -- call AuthController
 dashboard.php                                            Entry point -- calls DashboardController
-chat-list.php, chat.php                                  Entry points -- call ChatController
+threads.php, thread.php                                   Entry points -- call ChatController
+                                                            (named around "thread", not "chat" --
+                                                            some free hosts' WAF blanket-blocks any
+                                                            URL containing "chat"; see DEPLOY.md)
 profile.php                                               Entry point -- calls ProfileController
 captcha.php                                               Entry point -- calls CaptchaController
 api.php, me-public-key.php                                Entry points -- call ApiController
+bridge.php                                                 Same-origin postMessage relay for the
+                                                            contact form, when deployed cross-origin
+                                                            from the portfolio -- see DEPLOY.md
 admin/inbox.php                                           Entry point -- calls AdminController
 
 app/Controllers/   Request handling: reads input, calls a Model, picks a View

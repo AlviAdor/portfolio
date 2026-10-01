@@ -24,7 +24,7 @@ class ChatController
         $threadId = (int)($_GET['thread'] ?? 0);
         $thread = ChatThread::find($threadId);
         if (!$thread || !ChatThread::isParticipant($thread, (int)$_SESSION['user_id'])) {
-            header('Location: chat-list.php');
+            header('Location: threads.php');
             exit;
         }
 
