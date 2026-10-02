@@ -654,6 +654,19 @@ async function pollCallSignals() {
     }
 }
 
+// Jumps lastCallSignalId straight to "caught up" before polling ever starts
+// reacting to anything -- otherwise the first real poll starts from 0 and
+// replays this thread's entire signaling history, including a stale
+// 'offer' from some past call that was never answered (tab closed mid-ring,
+// browser crash, etc.). That replay is exactly what shows a call "ringing"
+// the moment the page loads, with nobody actually dialing.
+async function catchUpCallSignals() {
+    const data = await apiGet('call_signal_poll', `&thread=${THREAD_ID}&since=0`);
+    if (data.ok && data.signals.length) {
+        lastCallSignalId = Math.max(...data.signals.map((sig) => sig.id));
+    }
+}
+
 async function placeCall(withVideo) {
     if (callState !== 'idle') return;
     isVideoCall = withVideo;
@@ -774,6 +787,7 @@ async function startChat() {
     await fetchNew();
     polling = setInterval(fetchNew, 2500);
     receiptPolling = setInterval(pollReceipts, 2500);
+    await catchUpCallSignals();
     callPolling = setInterval(pollCallSignals, 1500);
 }
 
