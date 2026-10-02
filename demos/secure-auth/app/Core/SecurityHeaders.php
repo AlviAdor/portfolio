@@ -35,6 +35,22 @@ function enforce_https(): void
     exit;
 }
 
+// CSP's connect-src governs WebRTC ICE connections too, not just fetch()/XHR
+// -- without the STUN/TURN hosts listed here explicitly, voice calling's ICE
+// negotiation gets silently blocked by the browser, no matter how correct the
+// WebRTC code is. The TURN host is optional and only added if configured
+// (see app/Core/Calling.php) -- STUN-only still works for most networks.
+function connect_src_hosts(): string
+{
+    $hosts = ["'self'", 'stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'];
+    $turnHost = cfg('SAD_TURN_HOST');
+    if ($turnHost) {
+        $hosts[] = "turn:{$turnHost}";
+        $hosts[] = "turns:{$turnHost}";
+    }
+    return implode(' ', $hosts);
+}
+
 function send_security_headers(): string
 {
     enforce_https();
@@ -44,15 +60,17 @@ function send_security_headers(): string
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: DENY');
     header('Referrer-Policy: strict-origin-when-cross-origin');
-    header('Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()');
+    // microphone=(self), camera=(self): calling needs getUserMedia() for
+    // both. Still denies geolocation/payment -- nothing here asks for those.
+    header('Permissions-Policy: geolocation=(), microphone=(self), camera=(self), payment=()');
     header('Cross-Origin-Opener-Policy: same-origin');
     header('Cross-Origin-Resource-Policy: same-origin');
     header(
         "Content-Security-Policy: default-src 'self'; " .
         "script-src 'self' 'nonce-{$nonce}'; " .
         "style-src 'self'; " .
-        "img-src 'self' data:; " .
-        "connect-src 'self'; " .
+        "img-src 'self' data: blob:; " . // blob: for decrypted attachment previews (URL.createObjectURL)
+        "connect-src " . connect_src_hosts() . "; " .
         "font-src 'self'; " .
         "object-src 'none'; " .
         "base-uri 'self'; " .

@@ -31,6 +31,6 @@ class ChatController
         $user = User::findById((int)$_SESSION['user_id']);
         $myEmail = (string)($user['email'] ?? '');
 
-        view('chat/room', ['threadId' => $threadId, 'myEmail' => $myEmail]);
+        view('chat/room', ['threadId' => $threadId, 'myEmail' => $myEmail, 'iceServers' => ice_servers()]);
     }
 }

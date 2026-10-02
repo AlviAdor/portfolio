@@ -71,15 +71,68 @@ CREATE TABLE IF NOT EXISTS chat_threads (
 
 -- Each message is encrypted once per recipient (including the sender, so they can
 -- re-read their own sent messages) -- two wrapped copies of one AES key, one ciphertext.
+-- type='attachment' rows carry an encrypted *descriptor* (filename, mime type,
+-- size) in these same ciphertext/iv/wrapped_key_* columns -- the actual file
+-- bytes live in chat_attachments below, fetched and decrypted only when the
+-- recipient chooses to open it, not pre-loaded for every message in the log.
 CREATE TABLE IF NOT EXISTS chat_messages (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     thread_id INT UNSIGNED NOT NULL,
     sender_user_id INT UNSIGNED NOT NULL,
+    type ENUM('text', 'attachment', 'call_log') NOT NULL DEFAULT 'text',
     ciphertext MEDIUMTEXT NOT NULL,
     iv VARCHAR(32) NOT NULL,
     wrapped_key_sender TEXT NOT NULL,
     wrapped_key_recipient TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Delivery/read receipts -- plain timestamps, not encrypted: WHEN a
+    -- message reached or was seen on a device is no more sensitive than
+    -- created_at already is, and knowing it lets a sender's own bubble show
+    -- sent/delivered/seen without the server ever touching the message
+    -- content itself.
+    delivered_at TIMESTAMP NULL DEFAULT NULL,
+    seen_at TIMESTAMP NULL DEFAULT NULL,
     CONSTRAINT fk_chatmsg_thread FOREIGN KEY (thread_id) REFERENCES chat_threads(id) ON DELETE CASCADE,
     CONSTRAINT fk_chatmsg_sender FOREIGN KEY (sender_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- The actual file for an attachment-type chat_messages row, one-to-one via
+-- message_id. Encrypted the same way the message descriptor pointing at it
+-- is -- RSA-OAEP-wrapped AES-256-GCM, dual-wrapped sender+recipient -- so an
+-- attachment is exactly as unreadable to this server as message text is.
+-- Images and PDFs only, size-capped client *and* server side (see
+-- ApiController::chatAttachmentSend) to stay well under typical shared-
+-- hosting upload limits. Deliberately no filename/mime_type/size columns
+-- here in the clear -- the server validates those at upload time but never
+-- persists them outside encrypted storage; a DB dump should tell you
+-- nothing about an attachment beyond "a file exists," not its name or type.
+CREATE TABLE IF NOT EXISTS chat_attachments (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    message_id INT UNSIGNED NOT NULL UNIQUE,
+    ciphertext LONGTEXT NOT NULL,
+    iv VARCHAR(32) NOT NULL,
+    wrapped_key_sender TEXT NOT NULL,
+    wrapped_key_recipient TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_attachment_message FOREIGN KEY (message_id) REFERENCES chat_messages(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- WebRTC signaling for voice/video calls -- offers, answers, ICE candidates,
+-- and hangups, polled the same way chat_messages is. Encrypted the same way
+-- chat messages are, too (RSA-OAEP-wrapped AES-256-GCM, recipient's key) --
+-- the server relays ciphertext and can't read call setup details any more
+-- than it can read a chat message. Once two browsers connect, audio/video
+-- flows directly peer-to-peer (DTLS-SRTP, mandatory in the WebRTC spec) and
+-- never touches this table or this server again.
+CREATE TABLE IF NOT EXISTS call_signals (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    thread_id INT UNSIGNED NOT NULL,
+    sender_user_id INT UNSIGNED NOT NULL,
+    type ENUM('offer', 'answer', 'ice', 'hangup') NOT NULL,
+    ciphertext MEDIUMTEXT NOT NULL,
+    iv VARCHAR(32) NOT NULL,
+    wrapped_key TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_callsignal_thread FOREIGN KEY (thread_id) REFERENCES chat_threads(id) ON DELETE CASCADE,
+    CONSTRAINT fk_callsignal_sender FOREIGN KEY (sender_user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

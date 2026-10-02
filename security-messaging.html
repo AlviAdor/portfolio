@@ -91,27 +91,95 @@
     </aside>
 
     <main>
+        <section class="lock-hero section-screen">
+            <div class="lock-hero-copy">
+                <p class="section-label">Security Deep Dive</p>
+                <h1>Locked by design, not by promise.</h1>
+                <p class="hero-subtitle">
+                    Text, voice calls, video calls, and file attachments — every one of them encrypted
+                    end to end, by default, with no toggle to remember to switch on. Not "encrypted at rest."
+                    Not "encrypted on our servers, which we can still read." Encrypted before it leaves your
+                    device, decrypted only after it reaches the other person's.
+                </p>
+            </div>
+            <div class="lock-hero-visual" aria-hidden="true">
+                <div class="lock-glow"></div>
+                <svg class="lock-icon" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="14" y="58" width="92" height="72" rx="16" class="lock-body"/>
+                    <path d="M32 58V38a28 28 0 0 1 56 0v20" class="lock-shackle" fill="none" stroke-width="10" stroke-linecap="round"/>
+                    <circle cx="60" cy="90" r="9" class="lock-keyhole-dot"/>
+                    <rect x="56" y="96" width="8" height="18" rx="3" class="lock-keyhole-stem"/>
+                </svg>
+            </div>
+        </section>
+
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
-                <h2>Secure messaging, built so nobody else can read it.</h2>
+                <p class="section-label">Every channel, locked the same way</p>
+                <h2>Not just messages. Everything.</h2>
             </div>
             <div class="security-grid">
                 <article>
-                    <span>Zero-Knowledge</span>
-                    <h3>I can't read it</h3>
-                    <p>End-to-end encryption means your message is encrypted on your device. Even the server stores only encrypted bytes.</p>
+                    <span>🔒 Text</span>
+                    <h3>RSA-OAEP + AES-256-GCM</h3>
+                    <p>Every message is encrypted in your browser with a fresh AES key, which is itself wrapped with the recipient's RSA public key, before any network request is made. The database stores ciphertext — nothing else.</p>
                 </article>
                 <article>
-                    <span>Human Only</span>
-                    <h3>Bot-proof access</h3>
-                    <p>CAPTCHA and biometric verification ensure only humans can submit. Automated attacks and bots are instantly rejected.</p>
+                    <span>🔒 Voice &amp; video calls</span>
+                    <h3>DTLS-SRTP, peer to peer</h3>
+                    <p>Once two browsers connect, audio and video flow directly between them — never through this server at all. That's mandatory in the WebRTC spec, true even when a relay server helps two people connect through a restrictive network.</p>
                 </article>
                 <article>
-                    <span>Rate Limiting</span>
-                    <h3>DDoS resilience</h3>
-                    <p>Intelligent rate limiting prevents flooding. Each IP is monitored; excessive attempts trigger protective blocks.</p>
+                    <span>🔒 Call setup itself</span>
+                    <h3>The part most apps don't bother with</h3>
+                    <p>The offer, answer, and connection candidates that let two browsers find each other are metadata most systems leave in the clear. Here they're encrypted the same way a message is — the server relays ciphertext for that too.</p>
                 </article>
+                <article>
+                    <span>🔒 File attachments</span>
+                    <h3>Photos and PDFs, same guarantee</h3>
+                    <p>An attached file is encrypted client-side before upload — content and even its filename. The server's database can confirm a file exists; it cannot say what it is, what it's called, or what's inside it.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="about section-screen">
+            <div class="section-intro">
+                <p class="section-label">Why this is worth explaining</p>
+                <h2>"Encrypted" doesn't always mean what it sounds like.</h2>
+            </div>
+            <div class="about-layout">
+                <div class="about-copy">
+                    <p>
+                        Most people hear "encrypted" and assume it means one specific thing: nobody but the two
+                        people talking can read it. In practice, that word covers a wide range of very different
+                        guarantees, and the gap between them is exactly where real breaches happen.
+                    </p>
+                    <p>
+                        A message can be "encrypted" purely in transit (HTTPS) and still sit as plain, readable
+                        text on a company's server afterward — encrypted <em>to</em> the server, not <em>past</em>
+                        it. Some well-known chat apps are genuinely end-to-end encrypted only in an opt-in mode
+                        you have to know to turn on, while the default, everyday conversation stays server-side
+                        and readable by the provider. SMS text messages, still how a huge amount of the world
+                        communicates, have no encryption of their own at all. And even where message
+                        <em>content</em> is properly end-to-end encrypted, the metadata rarely is — who you talk
+                        to, when, how often, and from where is often collected and retained regardless, which is
+                        frequently the more revealing half of a conversation anyway.
+                    </p>
+                    <p>
+                        That gap — a product that's secure in its marketing and merely adequate in its
+                        architecture — is the thing this project set out to not do. Every piece built here
+                        (text, calls, call setup metadata, file attachments) uses the same real guarantee:
+                        content is encrypted on your device with a key the server never holds, and the database
+                        behind this site — the thing an actual breach would expose — only ever contains
+                        ciphertext. I can open phpMyAdmin myself, the person who built this, and read nothing.
+                        That's not a policy I'm promising to follow. It's the only thing the code is capable of
+                        doing.
+                    </p>
+                    <div class="about-actions">
+                        <a href="index.html#security" data-skip-intro class="button primary">Back to Security</a>
+                        <a href="project-secure-auth-demo.html" class="button secondary">See it running</a>
+                    </div>
+                </div>
             </div>
         </section>
 

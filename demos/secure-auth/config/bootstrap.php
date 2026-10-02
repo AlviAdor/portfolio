@@ -12,6 +12,7 @@ require __DIR__ . '/../app/Core/Database.php';
 require __DIR__ . '/../app/Core/Session.php';
 require __DIR__ . '/../app/Core/Captcha.php';
 require __DIR__ . '/../app/Core/Mailer.php';
+require __DIR__ . '/../app/Core/Calling.php';
 require __DIR__ . '/../app/Core/View.php';
 
 // One class per file, named exactly after the class -- Models and

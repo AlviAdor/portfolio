@@ -91,9 +91,31 @@
     </aside>
 
     <main>
+        <section class="auth-hero topic-hero section-screen">
+            <div class="topic-hero-copy">
+                <p class="section-label">Security Deep Dive</p>
+                <h1>Verified before anything else happens.</h1>
+                <p class="hero-subtitle">
+                    Rate-limited logins, a CAPTCHA that can't be skipped by hiding it, sessions that
+                    rotate on every privilege change. Authentication here isn't a form that calls it a
+                    day once a password matches -- it's enforced server-side, every time, the same way.
+                </p>
+            </div>
+            <div class="auth-hero-visual topic-hero-visual" aria-hidden="true">
+                <div class="topic-glow"></div>
+                <svg class="topic-icon" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="40" r="22" class="auth-key-bow"/>
+                    <circle cx="40" cy="40" r="22" class="auth-key-pulse-ring"/>
+                    <rect x="58" y="34" width="52" height="12" rx="4" class="auth-key-shaft"/>
+                    <rect x="90" y="46" width="10" height="16" class="auth-key-tooth"/>
+                    <rect x="104" y="46" width="10" height="22" class="auth-key-tooth"/>
+                </svg>
+            </div>
+        </section>
+
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
+                <p class="section-label">How it's enforced</p>
                 <h2>Authentication, treated like a contract, not a checkbox.</h2>
             </div>
             <div class="security-grid">

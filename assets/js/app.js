@@ -671,7 +671,7 @@ document.querySelectorAll('[data-contact-scroll]').forEach((btn) => {
 (() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const targets = Array.from(document.querySelectorAll(
-        '.section-intro, .project-card, .method-grid article, .hero-copy, .hero-visual, .security-grid article, .project-media, .about-copy, .skill-cloud, .contact-form, .screenshot-grid figure'
+        '.section-intro, .project-card, .method-grid article, .hero-copy, .hero-visual, .security-grid article, .project-media, .about-copy, .skill-cloud, .contact-form, .screenshot-grid figure, .lock-hero-copy, .lock-hero-visual, .topic-hero-copy, .topic-hero-visual'
     ));
 
     // assign --i variables for simple stagger inside containers and pick animation variant
@@ -680,8 +680,8 @@ document.querySelectorAll('[data-contact-scroll]').forEach((btn) => {
             Array.from(el.children).forEach((child, i) => child.style.setProperty('--i', String(i)));
         }
         let variant = 'reveal-slide-up';
-        if (el.matches('.hero-visual, .project-media, .screenshot-grid figure')) variant = 'reveal-zoom';
-        else if (el.matches('.hero-copy, .section-intro, .project-copy, .about-copy')) variant = 'reveal-slide-left';
+        if (el.matches('.hero-visual, .project-media, .screenshot-grid figure, .lock-hero-visual, .topic-hero-visual')) variant = 'reveal-zoom';
+        else if (el.matches('.hero-copy, .section-intro, .project-copy, .about-copy, .lock-hero-copy, .topic-hero-copy')) variant = 'reveal-slide-left';
         else if (el.matches('.project-card, .method-grid article, .security-grid article, .contact-card')) variant = 'reveal-slide-up';
         el.classList.add('reveal-target', variant);
     });

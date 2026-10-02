@@ -751,10 +751,156 @@ main {
 .section-intro,
 .project-copy,
 .about-copy,
-.contact-copy {
+.contact-copy,
+.lock-hero-copy,
+.topic-hero-copy {
     position: relative;
     z-index: 1;
     max-width: 40rem;
+}
+
+/* ---- Reusable "topic hero" pattern -- an animated line-art icon paired
+   with a glow, the same treatment the Security Messaging page's lock
+   introduced. .lock-hero* is that original instance; .topic-hero* is the
+   generalized version other topic pages (Authentication, Validation, Data
+   Integrity) build on, each with its own icon and its own small animation
+   so the pattern reads as a family, not a copy-paste repeat. ---- */
+.lock-hero,
+.topic-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+    gap: clamp(28px, 5vw, 56px);
+    align-items: center;
+}
+
+.lock-hero-copy h1,
+.topic-hero-copy h1 {
+    font-size: clamp(2.4rem, 4.2vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    margin-top: 10px;
+}
+
+.lock-hero-visual,
+.topic-hero-visual {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 40px;
+    min-height: 260px;
+}
+
+.lock-glow,
+.topic-glow {
+    position: absolute;
+    inset: 10%;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--topic-color, var(--green)) 60%, transparent), color-mix(in srgb, #9b8cff 55%, transparent));
+    filter: blur(54px);
+    opacity: 0.45;
+    border-radius: 48% 52% 55% 45% / 45% 55% 45% 55%;
+    z-index: 0;
+    animation: about-glow-float 9s ease-in-out infinite;
+}
+
+.lock-icon,
+.topic-icon {
+    position: relative;
+    z-index: 1;
+    width: min(180px, 60vw);
+    height: auto;
+    animation: lock-icon-float 7s ease-in-out infinite;
+}
+
+.lock-body {
+    fill: color-mix(in srgb, var(--surface) 90%, transparent);
+    stroke: var(--green);
+    stroke-width: 4;
+}
+
+.lock-shackle {
+    stroke: var(--green);
+}
+
+.lock-keyhole-dot,
+.lock-keyhole-stem {
+    fill: var(--green);
+}
+
+@keyframes lock-icon-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* ---- Authentication: a key with a radar-style verification pulse ---- */
+.auth-hero-visual { --topic-color: var(--cyan); }
+.auth-key-bow {
+    fill: color-mix(in srgb, var(--surface) 90%, transparent);
+    stroke: var(--cyan);
+    stroke-width: 9;
+}
+.auth-key-shaft,
+.auth-key-tooth { fill: var(--cyan); }
+.auth-key-pulse-ring {
+    fill: none;
+    stroke: var(--cyan);
+    stroke-width: 3;
+    opacity: 0.6;
+    transform-origin: 40px 40px;
+    animation: auth-pulse-ring 2.4s ease-out infinite;
+}
+@keyframes auth-pulse-ring {
+    0% { transform: scale(1); opacity: 0.6; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+
+/* ---- Validation: a shield whose checkmark continually re-verifies ---- */
+.validate-hero-visual { --topic-color: var(--green); }
+.validate-shield {
+    fill: color-mix(in srgb, var(--surface) 90%, transparent);
+    stroke: var(--green);
+    stroke-width: 4;
+}
+.validate-check {
+    stroke: var(--green);
+    stroke-dasharray: 72;
+    stroke-dashoffset: 72;
+    animation: validate-check-draw 3.4s ease-in-out infinite;
+}
+@keyframes validate-check-draw {
+    0% { stroke-dashoffset: 72; }
+    30% { stroke-dashoffset: 0; }
+    82% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 72; }
+}
+
+/* ---- Data integrity: a database scanned top to bottom, checksum-style ---- */
+.integrity-hero-visual { --topic-color: var(--violet); }
+.integrity-db-top {
+    fill: color-mix(in srgb, var(--surface) 85%, var(--violet));
+    stroke: var(--violet);
+    stroke-width: 3;
+}
+.integrity-db-body {
+    fill: color-mix(in srgb, var(--surface) 92%, transparent);
+    stroke: var(--violet);
+    stroke-width: 3;
+}
+.integrity-db-ring {
+    fill: none;
+    stroke: var(--violet);
+    stroke-width: 2.5;
+    opacity: 0.6;
+}
+.integrity-scan-line {
+    fill: var(--violet);
+    opacity: 0;
+    animation: integrity-scan 2.8s ease-in-out infinite;
+}
+@keyframes integrity-scan {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 0.85; }
+    90% { opacity: 0.85; }
+    100% { transform: translateY(90px); opacity: 0; }
 }
 
 .greeting,
@@ -1376,12 +1522,16 @@ main {
         padding-right: 20px;
     }
 
-    .hero {
+    .hero,
+    .lock-hero,
+    .topic-hero {
         grid-template-columns: 1fr;
         gap: 32px;
     }
 
-    .hero-visual {
+    .hero-visual,
+    .lock-hero-visual,
+    .topic-hero-visual {
         order: 2;
     }
 
@@ -1389,7 +1539,9 @@ main {
     .section-intro,
     .project-copy,
     .about-copy,
-    .contact-copy {
+    .contact-copy,
+    .lock-hero-copy,
+    .topic-hero-copy {
         max-width: 100%;
     }
 

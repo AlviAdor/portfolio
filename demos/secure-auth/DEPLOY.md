@@ -187,6 +187,43 @@ open the browser console on the live portfolio and confirm there's no `event.ori
 logged, and that `SAD_ALLOWED_ORIGIN` in `config.local.php` is exactly `https://alviador.github.io`
 with no trailing slash.
 
+## I. Updating an already-deployed install
+
+`git push` only updates GitHub -- it never touches the live PHP host, since there's no CI/CD
+wired up here (free tier, nothing to wire it to). Every change to this folder needs two steps:
+commit and push as usual, *and* re-upload the changed files to the host over FTP. Easy to
+forget, since the first step feels like "done."
+
+If a change added a new database table or column (check `db/migrations/` -- anything dated
+after your last deploy needs running), open phpMyAdmin's SQL tab on the live database and run
+that migration file's contents once. It's written to be safe to run on a database with existing
+data (`CREATE TABLE IF NOT EXISTS`, nothing destructive).
+
+Voice/video calling is the first thing that needed this: `db/migrations/2026-10-01-call-signals.sql`
+adds the `call_signals` table (encrypted offer/answer/ICE columns -- ciphertext, iv,
+wrapped_key, not plain JSON), and `app/Core/SecurityHeaders.php` changed what it sends for
+`Permissions-Policy` (microphone *and* camera access -- miss the camera one and video calls
+fail with a silent permissions error that looks nothing like a camera problem) and
+`Content-Security-Policy` (STUN/TURN hosts in `connect-src`). Re-upload the whole `app/`
+folder, `assets/call-client.js`, and `app/Views/chat/room.php`, then run that migration, before
+calling will work on the live site.
+
+Encrypted file attachments are the second: `db/migrations/2026-10-02-chat-attachments.sql` adds
+a `type` column to `chat_messages` and the `chat_attachments` table (ciphertext/iv/wrapped keys
+only -- deliberately no filename/mime type/size columns, see the README). It also needs
+`img-src` in `app/Core/SecurityHeaders.php`'s CSP to include `blob:` (attachment thumbnails are
+rendered from a decrypted `blob:` URL, not a normal image URL) -- re-upload `app/`,
+`app/Views/chat/room.php`, and `assets/crypto-client.js`, then run that migration, before
+attachments work on the live site.
+
+Read receipts and in-thread call history are the third:
+`db/migrations/2026-10-03-receipts-call-log.sql` adds `delivered_at`/`seen_at` to
+`chat_messages` and extends its `type` enum with `call_log`. No header or CSP changes this
+time -- just re-upload `app/`, `app/Views/chat/room.php`, and `assets/style.css`, then run that
+migration, before sent/delivered/seen ticks or call-log entries show up on the live site. An
+already-deployed thread with older messages is unaffected -- they just show no receipt state
+until someone sends something new, same as any other additive column.
+
 ## Checklist
 
 - [ ] InfinityFree account created, subdomain active

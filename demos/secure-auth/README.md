@@ -48,12 +48,92 @@ the conversation) with a fresh key per message. The server stores and relays cip
 nothing else. New messages show up via polling every 2.5 seconds — no WebSocket server to run,
 fast enough that it doesn't feel like polling.
 
+**Sent, delivered, seen.** A message you send shows a single checkmark the moment it's stored,
+a double gray checkmark once the other person's device has actually polled and received it, and
+a double colored checkmark once they've had the thread open and visible while it arrived --
+same visual language most chat apps use. Delivery is automatic: a poll *is* delivery, so
+`chat_fetch` marks it server-side with no extra round trip. "Seen" is a deliberate signal the
+client only sends while the tab is actually focused and visible (`chat_mark_seen`), not
+inferred from polling alone -- the difference between a message that reached a device and one a
+person actually looked at. Both are plain timestamps (`delivered_at`/`seen_at` on
+`chat_messages`), not encrypted -- *when* something arrived is no more sensitive than the
+`created_at` column already is; *what* it says stays exactly as encrypted as ever.
+
+**Call history, in the thread itself.** When a call ends, a small centered entry shows up in
+the chat -- "Audio call · 2:14", "Missed call", "Call declined" -- the same place the
+conversation already lives, instead of a separate call log you'd have to go find. Only the
+caller's browser ever writes it (`logCallResult()` in `room.php`), so a call both people were on
+doesn't end up logged twice; the callee's side still sees it normally, the same way they see any
+other message in the thread. It's encrypted the same dual-wrap way a text message is -- call
+type, outcome, and duration are never stored in the clear, same as the call setup signaling
+itself already wasn't.
+
 The one real tradeoff of doing it this way: your private key lives in one browser's
 `localStorage`. Register and administer from the same browser, same as you'd treat a hardware
 security key. If you ever need multi-device access to the same key, that's a deliberate
 feature I haven't built — it'd mean either syncing an encrypted key blob somewhere or adding a
 second keypair per device, and I'd rather ship the single-device version correctly than a
 multi-device version with a hole in it.
+
+**Voice and video calling.** Any open chat thread can place a real call, audio or video, full
+screen, styled after Apple's FaceTime -- dark takeover, centered avatar or full-bleed video, a
+translucent pill of controls floating at the bottom. Two layers of encryption, deliberately:
+
+- *The media.* Once two browsers connect, audio/video flows directly between them --
+  DTLS-SRTP, mandatory in the WebRTC spec, so it's encrypted the same way every WebRTC call is,
+  with no code here involved in that part. This holds even through a TURN relay: the DTLS keys
+  are negotiated directly between the two browsers, so a relay forwards encrypted packets it
+  can't itself decrypt.
+- *The signaling.* The offer, answer, and ICE candidates that let the two browsers find each
+  other in the first place are *not* automatically private the way the media is -- so each one
+  is encrypted the same way a chat message is (RSA-OAEP-wrapped AES-256-GCM, the peer's public
+  key) before it ever reaches the server. `call_signals` stores and this server relays
+  ciphertext, same as `chat_messages` -- it can't read call setup details any more than it can
+  read a message. Polled the same way chat messages are (`app/Models/CallSignal.php`) -- no
+  WebSocket server, same reasoning as the chat's own polling.
+
+Deliberately plain WebRTC throughout -- no library, no SFU, no experimental APIs (insertable
+streams, etc.) -- so it's as lightweight and broadly compatible as the rest of this app.
+Camera/mic toggle mid-call just flips `track.enabled` rather than renegotiating the connection,
+for the same reason. STUN (free, no account, built into `app/Core/Calling.php`) is enough for
+most home networks; stricter ones (symmetric NAT, corporate firewalls) need a TURN relay too,
+which costs real bandwidth to run -- optional, configured via `SAD_TURN_HOST`/
+`SAD_TURN_USERNAME`/`SAD_TURN_CREDENTIAL` in `config.local.php` if you sign up for one. Without
+it, calling still works, just across a narrower set of networks.
+
+**The FaceTime details that make a call feel real, not like a demo.** A caller hears a real
+ringback tone; a callee hears a real ringtone -- both synthesized on the fly with the Web Audio
+API (`CallAudio` in `assets/call-client.js`, a couple of oscillators and a gain envelope), not
+shipped as audio files, so there's nothing extra to download. The status text is explicit about
+what's actually happening -- "Calling…" while it rings, "Connecting…" once the other side
+answers and the two browsers are still negotiating, "Connected" with a running timer once media
+is actually flowing -- because those are three different states and collapsing them into one
+"Calling..." was more confusing than the extra word. An unanswered call gives up after 30
+seconds (`CALL_RING_TIMEOUT_MS` in `room.php`) -- the caller sees "No answer", the callee's
+incoming-call UI clears to "Missed call" -- rather than ringing forever. A badge reading
+"End-to-end encrypted" stays visible the entire call, next to the peer's name, specifically so
+the encryption isn't just true, it's *visible* while you're using it. A small signal-strength
+indicator appears in a corner only when `RTCPeerConnection.iceConnectionState` actually reports
+`disconnected` -- it's invisible the rest of the time, not a constant status widget -- and if
+the connection fails outright, both sides get an explicit "Call dropped — connection lost"
+instead of a UI that just quietly hangs.
+
+## Encrypted file attachments
+
+Chat isn't just text. The paperclip button in the message box lets you attach an image (JPEG,
+PNG, GIF, WebP) or a PDF, up to 3MB, and it's encrypted exactly the same way a message is --
+client-side, before it leaves the browser, with the same RSA-OAEP-wrapped-AES-256-GCM scheme,
+dual-wrapped so both people in the thread can decrypt their own copy. Two things get encrypted
+separately: the file bytes themselves, and a small descriptor (filename, MIME type, size) sent
+as its own encrypted payload -- because the filename and type are themselves information about
+you, and leaving them in the clear "just for convenience" would quietly undercut the whole
+point. The `chat_attachments` table has no `filename`, `mime_type`, or `size_bytes` column at
+all, on purpose -- the server validates those at upload time (type allow-list, size cap) using
+the values the browser sends, then discards them; what's actually stored is `ciphertext`, `iv`,
+and two wrapped keys, same shape as every other encrypted row in this app. Opening an
+attachment fetches that ciphertext, decrypts it client-side, and renders it from a local
+`blob:` URL -- images inline, PDFs in a new tab -- so the plaintext file only ever exists
+briefly in the recipient's own browser memory.
 
 ## Getting it running
 
@@ -234,17 +314,31 @@ bridge.php                                                 Same-origin postMessa
 admin/inbox.php                                           Entry point -- calls AdminController
 
 app/Controllers/   Request handling: reads input, calls a Model, picks a View
-app/Models/        All the SQL -- User, LoginAudit, ContactMessage, ChatThread, ChatMessage
+app/Models/        All the SQL -- User, LoginAudit, ContactMessage, ChatThread, ChatMessage,
+                   CallSignal (encrypted offers/answers/ICE candidates for voice/video calls),
+                   ChatAttachment (encrypted file attachments -- no filename/type/size columns)
 app/Views/          HTML templates, one per page (auth/, chat/, admin/ subfolders)
 app/Core/           Cross-cutting stuff every page needs: Database (db(), password hashing),
                     Session (CSRF, current_user(), the json_ok()/json_fail() helpers),
-                    SecurityHeaders (CSP + HSTS + the HTTPS redirect), Captcha, Mailer,
-                    SmtpMailer, Config (reads env vars or config.local.php), View (the
-                    render() helper)
+                    SecurityHeaders (CSP + HSTS + the HTTPS redirect, incl. the
+                    microphone/camera Permissions-Policy calling needs), Captcha, Mailer,
+                    SmtpMailer, Calling (STUN/TURN config), Compat (polyfills for PHP builds
+                    missing an extension, e.g. mbstring), Config (reads env vars or
+                    config.local.php), View (the render() helper)
+
+assets/call-client.js          WebRTC mechanics for one call -- peer connection, mic/camera,
+                                remote audio/video -- plus CallAudio, the Web Audio ringback/
+                                ringtone synthesizer. Encryption of the signaling itself (so an
+                                offer/answer/ICE candidate is ciphertext the whole way, not just
+                                HTTPS-in-transit) and the actual api.php calls both live in
+                                app/Views/chat/room.php, reusing SecureCrypto the same way text
+                                messages already do -- this file stays pure WebRTC mechanics.
 
 config/bootstrap.php           Every request starts here -- headers, session, autoloader
 config/config.local.php.example   Copy to config.local.php and fill in real secrets (gitignored)
 db/setup.sql                   Table definitions -- import via phpMyAdmin
+db/migrations/                 Schema changes made after the initial setup.sql -- run these by
+                                hand (phpMyAdmin's SQL tab) against a database that predates them
 db/optional-app-user.sql       Optional: a dedicated low-privilege DB user
 assets/crypto-client.js        All browser-side crypto -- untouched by the MVC split
 DEPLOY.md                      Free hosting, start to finish -- see "Deploying" below

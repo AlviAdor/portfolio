@@ -147,8 +147,35 @@ const SecureCrypto = (() => {
         return new TextDecoder().decode(plaintextBuf);
     }
 
+    // Same scheme as encryptForRecipient/decryptMessage, for a file's raw
+    // bytes instead of a text string -- skips the TextEncoder/TextDecoder
+    // step so a binary file never gets needlessly re-encoded as text first.
+    // Used for chat attachments.
+    async function encryptBufferForRecipient(buffer, recipientPublicKeyB64) {
+        const recipientKey = await importPublicKey(recipientPublicKeyB64);
+        const aesKeyRaw = randomBytes(32);
+        const aesKey = await crypto.subtle.importKey('raw', aesKeyRaw, 'AES-GCM', true, ['encrypt']);
+        const iv = randomBytes(12);
+        const ciphertext = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, buffer);
+        const wrappedKey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, recipientKey, aesKeyRaw);
+        return {
+            ciphertext: b64encode(ciphertext),
+            iv: b64encode(iv),
+            wrappedKey: b64encode(wrappedKey),
+            aesKeyRaw,
+        };
+    }
+
+    async function decryptBuffer(ciphertextB64, ivB64, wrappedKeyB64, privateKey) {
+        const aesKeyRaw = await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, privateKey, b64decode(wrappedKeyB64));
+        const aesKey = await crypto.subtle.importKey('raw', aesKeyRaw, 'AES-GCM', false, ['decrypt']);
+        const iv = new Uint8Array(b64decode(ivB64));
+        return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, aesKey, b64decode(ciphertextB64)); // returns an ArrayBuffer
+    }
+
     return {
         setupIdentity, hasLocalIdentity, unlockIdentity, isUnlocked, lock,
         getPrivateKey, importPublicKey, encryptForRecipient, wrapKeyFor, decryptMessage,
+        encryptBufferForRecipient, decryptBuffer,
     };
 })();

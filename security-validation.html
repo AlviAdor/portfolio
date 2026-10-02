@@ -91,9 +91,28 @@
     </aside>
 
     <main>
+        <section class="validate-hero topic-hero section-screen">
+            <div class="topic-hero-copy">
+                <p class="section-label">Security Deep Dive</p>
+                <h1>Nothing reaches the database unchecked.</h1>
+                <p class="hero-subtitle">
+                    Every field is re-verified server-side, every query is parameterized, every
+                    character that could pass as a script is escaped before it's stored or shown back.
+                    Not a single trust-the-client shortcut anywhere in the path.
+                </p>
+            </div>
+            <div class="validate-hero-visual topic-hero-visual" aria-hidden="true">
+                <div class="topic-glow"></div>
+                <svg class="topic-icon" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M60 10 L104 26 V64 C104 96 86 118 60 130 C34 118 16 96 16 64 V26 Z" class="validate-shield" stroke-width="4"/>
+                    <path d="M38 68 L54 84 L86 48" class="validate-check" fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </section>
+
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
+                <p class="section-label">How it's enforced</p>
                 <h2>Validation is the barrier between your input and my database.</h2>
             </div>
             <div class="security-grid">

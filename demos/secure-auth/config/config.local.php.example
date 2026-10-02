@@ -1,0 +1,38 @@
+<?php
+// Copy this file to config.local.php (same folder) and fill in real values.
+// config.local.php is gitignored -- it never gets committed, and it's the
+// only place real credentials belong on a host with no environment variable
+// support (most free PHP hosting, InfinityFree included -- see DEPLOY.md).
+//
+// Every one of these is optional: a key left out just falls back to the
+// default in app/Core/Database.php / app/Core/SmtpMailer.php / app/Core/
+// Calling.php. Locally, with XAMPP's default root/no-password MySQL, you
+// don't need this file at all.
+return [
+    // --- Database (only needed if you're not using local root/no-password MySQL) ---
+    'SAD_DB_HOST' => 'localhost',
+    'SAD_DB_NAME' => 'secure_auth_demo',
+    'SAD_DB_USER' => 'your_db_username',
+    'SAD_DB_PASS' => 'your_db_password',
+
+    // --- Outbound email via SMTP (required on hosts that block mail(), e.g. InfinityFree) ---
+    'SAD_SMTP_HOST' => 'smtp.gmail.com',
+    'SAD_SMTP_PORT' => '587',
+    'SAD_SMTP_SECURE' => 'tls', // 'tls' for port 587 (STARTTLS), 'ssl' for port 465 (implicit TLS)
+    'SAD_SMTP_USER' => 'you@gmail.com',
+    'SAD_SMTP_PASS' => 'your 16-char app password',
+    'SAD_SMTP_FROM' => 'you@gmail.com',
+    'SAD_SMTP_FROM_NAME' => 'Secure Auth Demo',
+
+    // --- CORS: the exact origin of the portfolio, once it's on a different domain ---
+    'SAD_ALLOWED_ORIGIN' => 'https://yourusername.github.io',
+
+    // --- Voice calling: optional TURN relay for networks where STUN alone isn't
+    // enough (symmetric NAT, corporate firewalls). Leave these out entirely and
+    // calling still works for most home networks via the free STUN servers
+    // already built into app/Core/Calling.php -- only add a TURN relay if you
+    // actually hit connection failures and want wider coverage. ---
+    'SAD_TURN_HOST' => 'your-turn-provider.example.com:3478',
+    'SAD_TURN_USERNAME' => 'your_turn_username',
+    'SAD_TURN_CREDENTIAL' => 'your_turn_credential',
+];

@@ -91,9 +91,30 @@
     </aside>
 
     <main>
+        <section class="integrity-hero topic-hero section-screen">
+            <div class="topic-hero-copy">
+                <p class="section-label">Security Deep Dive</p>
+                <h1>Records that can't quietly drift wrong.</h1>
+                <p class="hero-subtitle">
+                    Strict schema types, constraints the database itself enforces, and foreign keys
+                    that cascade instead of leaving orphaned rows behind. Accuracy isn't something
+                    checked after the fact -- it's something the structure doesn't allow to break.
+                </p>
+            </div>
+            <div class="integrity-hero-visual topic-hero-visual" aria-hidden="true">
+                <div class="topic-glow"></div>
+                <svg class="topic-icon" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 30 V110 C16 118.8 34.1 126 60 126 C85.9 126 104 118.8 104 110 V30" class="integrity-db-body"/>
+                    <path d="M16 70 C16 78.8 34.1 86 60 86 C85.9 86 104 78.8 104 70" class="integrity-db-ring"/>
+                    <ellipse cx="60" cy="30" rx="44" ry="16" class="integrity-db-top"/>
+                    <rect x="16" y="27" width="88" height="6" rx="2" class="integrity-scan-line"/>
+                </svg>
+            </div>
+        </section>
+
         <section class="detail-grid section-screen">
             <div class="section-intro">
-                <p class="section-label">Security Deep Dive</p>
+                <p class="section-label">How it's enforced</p>
                 <h2>Data integrity means your records stay accurate, always.</h2>
             </div>
             <div class="security-grid">
