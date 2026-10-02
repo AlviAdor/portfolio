@@ -479,9 +479,9 @@ function loadCryptoClient() {
 // real deployment target), a direct cross-origin fetch() can get blocked by
 // that host's own edge/bot-protection layer before this app's CORS config is
 // even considered -- see demos/secure-auth/DEPLOY.md section H. Talking to a
-// same-origin bridge page via postMessage sidesteps that entirely: postMessage
-// isn't subject to CORS, and the bridge's own fetch() to its API is
-// same-origin, so none of this applies on that side.
+// bridge page via postMessage sidesteps that entirely: postMessage isn't
+// subject to CORS, and the bridge's own fetch() to its API is same-origin, so
+// none of this applies on that side.
 const BRIDGE_ORIGIN = (() => {
     try {
         return new URL(SECURE_MESSAGING_BASE, location.href).origin;
@@ -491,30 +491,60 @@ const BRIDGE_ORIGIN = (() => {
 })();
 const IS_CROSS_ORIGIN_BACKEND = BRIDGE_ORIGIN !== location.origin;
 
-let bridgeFramePromise = null;
-function getBridgeFrame() {
-    if (bridgeFramePromise) return bridgeFramePromise;
-    bridgeFramePromise = new Promise((resolve) => {
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        iframe.setAttribute("aria-hidden", "true");
+// A real popup window, not an invisible iframe (the obvious first approach,
+// and what this used to be). This host's anti-bot layer marks a solved
+// challenge with a cookie that has no explicit SameSite attribute, which
+// Chrome treats as SameSite=Lax by default -- and a Lax cookie is never sent
+// on a cross-site iframe's request, only on a genuine top-level navigation.
+// So the iframe version silently failed every single time: the challenge
+// looked unsolved on every request, forever, no matter how many times it
+// "passed," because the proof-of-passing cookie never made the trip. A
+// popup IS a top-level navigation, so the cookie behaves exactly the way it
+// does for a normal visit to the site -- solved once, remembered after.
+// Deliberately small, not display:none -- it has to actually render for its
+// own challenge-solving JS to run, which is the entire point of using one.
+let bridgePopupPromise = null;
+function getBridgePopup() {
+    if (bridgePopupPromise) return bridgePopupPromise;
+    bridgePopupPromise = new Promise((resolve) => {
+        const popup = window.open(
+            `${SECURE_MESSAGING_BASE}bridge.php`,
+            "secure_auth_bridge",
+            "width=80,height=80,left=0,top=0"
+        );
+        if (!popup) {
+            resolve(null); // blocked by a popup blocker -- caller falls back to mailto
+            return;
+        }
         function onReady(event) {
             if (event.origin !== BRIDGE_ORIGIN || !event.data?.bridgeReady) return;
             window.removeEventListener("message", onReady);
-            resolve(iframe);
+            resolve(popup);
         }
         window.addEventListener("message", onReady);
-        // Don't hang forever if the bridge never loads (network issue, host down).
-        setTimeout(() => { window.removeEventListener("message", onReady); resolve(iframe); }, 8000);
-        iframe.src = `${SECURE_MESSAGING_BASE}bridge.php`;
-        document.body.appendChild(iframe);
+        // A browser that's never solved this host's challenge before can
+        // take a few real seconds the first time -- more room than the old
+        // iframe's budget, since this path is now the one actually expected
+        // to succeed rather than a long shot.
+        setTimeout(() => {
+            window.removeEventListener("message", onReady);
+            resolve(popup.closed ? null : popup);
+        }, 12000);
     });
-    return bridgeFramePromise;
+    return bridgePopupPromise;
+}
+
+function closeBridgePopup() {
+    if (!bridgePopupPromise) return;
+    bridgePopupPromise.then((popup) => {
+        if (popup && !popup.closed) popup.close();
+    });
 }
 
 let bridgeRequestSeq = 0;
 async function bridgeRequest(type, payload) {
-    const iframe = await getBridgeFrame();
+    const popup = await getBridgePopup();
+    if (!popup) return { ok: false, error: "Could not open the secure bridge window (popup blocked?)." };
     const requestId = `req_${++bridgeRequestSeq}_${Date.now()}`;
     return new Promise((resolve) => {
         const timeout = setTimeout(() => {
@@ -529,7 +559,7 @@ async function bridgeRequest(type, payload) {
             resolve(event.data.result);
         }
         window.addEventListener("message", onMessage);
-        iframe.contentWindow.postMessage({ requestId, type, payload }, BRIDGE_ORIGIN);
+        popup.postMessage({ requestId, type, payload }, BRIDGE_ORIGIN);
     });
 }
 
@@ -598,6 +628,12 @@ form?.addEventListener("submit", (event) => {
     }
     if (!valid) return;
 
+    // Opened synchronously, still inside the click's user-activation window --
+    // popup blockers judge that moment, not whether the code around it is
+    // async. Calling this later, after an await, is exactly what let a
+    // browser's popup blocker step in and silently defeat the whole bridge.
+    if (IS_CROSS_ORIGIN_BACKEND) getBridgePopup();
+
     const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
     const bodyText = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
     mailtoLink?.setAttribute("href", `mailto:sarker.faizal2537@gmail.com?subject=${subject}&body=${bodyText}`);
@@ -618,6 +654,8 @@ form?.addEventListener("submit", (event) => {
         })
         .finally(() => {
             if (submitBtn) submitBtn.disabled = false;
+            closeBridgePopup();
+            bridgePopupPromise = null; // next submission gets a fresh popup/promise
         });
 });
 

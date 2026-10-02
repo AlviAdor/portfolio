@@ -7,31 +7,27 @@ require __DIR__ . '/config/bootstrap.php';
 // hasn't seen a solved challenge for, including cross-origin fetch() calls,
 // and that challenge response carries no CORS headers -- so the browser
 // blocks it before this app's own CORS logic in ApiController ever gets a
-// chance to run. A normal page load (like this one) passes that same check
-// fine, because the browser actually executes the challenge's JS.
+// chance to run. A normal top-level page load (like this one) passes that
+// same check fine, because the browser actually executes the challenge's JS
+// and the resulting proof-of-passing cookie gets attached normally.
 //
 // So: instead of the portfolio's contact form calling api.php directly
-// cross-origin, it loads this page in a hidden iframe and talks to it with
-// postMessage, which isn't subject to CORS at all. This page then makes a
-// same-origin call to api.php -- same-origin, so none of the above applies
-// -- and relays the result back to the parent window.
+// cross-origin, it opens this page in a small popup window and talks to it
+// with postMessage, which isn't subject to CORS at all. This page then
+// makes a same-origin call to api.php -- same-origin, so none of the above
+// applies -- and relays the result back via window.opener.
+//
+// This used to be a hidden iframe instead of a popup. That failed silently,
+// every time: this host's anti-bot cookie has no explicit SameSite
+// attribute, which Chrome defaults to Lax, and a Lax cookie is never sent on
+// a cross-site iframe's request -- only on a genuine top-level navigation.
+// So the embedded version could never actually present proof of a solved
+// challenge, no matter how many times it solved one. A popup doesn't have
+// that problem; it IS a top-level navigation. No frame-ancestors override is
+// needed here anymore either, for the same reason -- this page is opened,
+// not embedded, so the site's default `frame-ancestors 'none'` already
+// applies correctly and needs no exception.
 $allowedOrigin = cfg('SAD_ALLOWED_ORIGIN') ?: '';
-
-// Every other page in this app sends X-Frame-Options: DENY and
-// frame-ancestors 'none' (see SecurityHeaders.php) -- correct for login,
-// dashboard, chat, all of it, but this one page's entire job is to be
-// embedded in an iframe. Replace both with a policy scoped to exactly the
-// one configured origin, nothing wider.
-header_remove('X-Frame-Options');
-if ($allowedOrigin !== '') {
-    header(
-        "Content-Security-Policy: default-src 'self'; " .
-        "script-src 'self' 'nonce-" . csp_nonce() . "'; " .
-        "style-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self'; " .
-        "object-src 'none'; base-uri 'self'; form-action 'self'; " .
-        "frame-ancestors {$allowedOrigin}; upgrade-insecure-requests"
-    );
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +54,7 @@ async function handleRequest(type, payload) {
 
 window.addEventListener('message', async (event) => {
     // Only ever act on messages from the one origin this bridge exists for --
-    // otherwise any page on the internet could embed this iframe and use it
+    // otherwise any page on the internet could open this window and use it
     // to submit spam through the contact form.
     if (!ALLOWED_ORIGIN || event.origin !== ALLOWED_ORIGIN) return;
     const { requestId, type, payload } = event.data || {};
@@ -73,12 +69,15 @@ window.addEventListener('message', async (event) => {
     event.source.postMessage({ requestId, result }, event.origin);
 });
 
-// Lets the parent know this iframe is actually ready to receive messages --
-// there's an unavoidable gap between the iframe element loading and this
-// script finishing (bot-challenge permitting), and a message sent too early
-// would just be dropped.
-if (window.parent !== window && ALLOWED_ORIGIN) {
-    window.parent.postMessage({ bridgeReady: true }, ALLOWED_ORIGIN);
+// Lets the opener know this window is actually ready to receive messages --
+// there's an unavoidable gap between the window opening and this script
+// finishing (bot-challenge permitting), and a message sent too early would
+// just be dropped. A popup, not an iframe: this host's anti-bot cookie is
+// SameSite=Lax by default, which browsers withhold from a cross-site
+// iframe's request but send normally on a real top-level navigation like
+// this one -- see assets/js/app.js's getBridgePopup() for the full story.
+if (window.opener && ALLOWED_ORIGIN) {
+    window.opener.postMessage({ bridgeReady: true }, ALLOWED_ORIGIN);
 }
 </script>
 </body>
