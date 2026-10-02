@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 class ContactMessage
 {
-    public static function create(string $name, string $email, string $ciphertext, string $iv, string $wrappedKey): int
+    public static function create(string $name, string $email, string $ciphertext, string $iv, string $wrappedKey, ?string $senderIp = null, ?string $senderUserAgent = null): int
     {
         db()->prepare(
-            'INSERT INTO contact_messages (sender_name, sender_email, ciphertext, iv, wrapped_key) VALUES (?, ?, ?, ?, ?)'
-        )->execute([$name, $email, $ciphertext, $iv, $wrappedKey]);
+            'INSERT INTO contact_messages (sender_name, sender_email, ciphertext, iv, wrapped_key, sender_ip, sender_user_agent) VALUES (?, ?, ?, ?, ?, ?, ?)'
+        )->execute([$name, $email, $ciphertext, $iv, $wrappedKey, $senderIp, $senderUserAgent]);
         return (int)db()->lastInsertId();
     }
 
@@ -22,7 +22,7 @@ class ContactMessage
     public static function allForInbox(): array
     {
         return db()->query(
-            'SELECT id, sender_name, sender_email, ciphertext, iv, wrapped_key, status, created_at FROM contact_messages ORDER BY created_at DESC'
+            'SELECT id, sender_name, sender_email, ciphertext, iv, wrapped_key, status, created_at, sender_ip, sender_user_agent FROM contact_messages ORDER BY created_at DESC'
         )->fetchAll();
     }
 

@@ -85,7 +85,13 @@ class ApiController
             json_fail('Message could not be encrypted. Please try again.');
         }
 
-        ContactMessage::create($name, $email, $ciphertext, $iv, $wrappedKey);
+        // Spam/abuse triage only, admin-inbox-only -- same plain treatment
+        // login_audit.ip_address already gets for login attempts. Never the
+        // message content, which stays exactly as encrypted as ever.
+        $senderIp = $_SERVER['REMOTE_ADDR'] ?? null;
+        $senderUserAgent = isset($_SERVER['HTTP_USER_AGENT']) ? mb_substr((string)$_SERVER['HTTP_USER_AGENT'], 0, 255) : null;
+
+        ContactMessage::create($name, $email, $ciphertext, $iv, $wrappedKey, $senderIp, $senderUserAgent);
 
         $admin = User::firstAdmin();
         if ($admin) {

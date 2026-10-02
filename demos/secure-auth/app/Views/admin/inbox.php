@@ -98,6 +98,7 @@ async function renderMessages() {
                 <span class="status-pill ${statusClass}">${msg.status}</span>
             </div>
             <div class="from">${escapeHtml(msg.sender_email)} &middot; <time>${fmtDate(msg.created_at)}</time></div>
+            <div class="from-meta">${escapeHtml(msg.sender_ip || 'unknown IP')} &middot; ${escapeHtml(msg.sender_user_agent || 'unknown device')}</div>
             <div class="message-body locked" data-body>Decrypting…</div>
             <div class="message-card-actions" data-actions></div>
         `;

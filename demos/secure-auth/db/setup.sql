@@ -55,7 +55,12 @@ CREATE TABLE IF NOT EXISTS contact_messages (
     iv VARCHAR(32) NOT NULL,
     wrapped_key TEXT NOT NULL,
     status ENUM('new', 'read', 'invited') NOT NULL DEFAULT 'new',
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    -- Operational metadata for spam/abuse triage, admin-inbox-only -- same
+    -- plain-column treatment login_audit.ip_address already gets. Never the
+    -- message content, which stays exactly as encrypted as ever.
+    sender_ip VARCHAR(45) NULL,
+    sender_user_agent VARCHAR(255) NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS chat_threads (
