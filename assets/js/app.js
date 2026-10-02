@@ -467,7 +467,17 @@ function loadCryptoClient() {
     if (cryptoClientLoad) return cryptoClientLoad;
     cryptoClientLoad = new Promise((resolve) => {
         const script = document.createElement("script");
-        script.src = `${SECURE_MESSAGING_BASE}assets/crypto-client.js`;
+        // Same-origin (assets/js/crypto-client.js, a maintained copy of the
+        // backend's file -- see that file's header comment), not
+        // SECURE_MESSAGING_BASE -- loading it cross-origin from the backend
+        // used to hit that host's anti-bot edge layer the same way any
+        // other cross-origin request does, which serves a JS challenge page
+        // instead of the real script. A <script src> load doesn't execute a
+        // challenge page's JS, so SecureCrypto just silently never got
+        // defined and every contact form submission quietly fell back to
+        // the mailto link. This file has no server dependency, so there's
+        // no reason it needs to come from the backend's origin at all.
+        script.src = "assets/js/crypto-client.js";
         script.onload = () => resolve(true);
         script.onerror = () => resolve(false);
         document.head.appendChild(script);

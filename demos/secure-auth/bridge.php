@@ -27,7 +27,16 @@ require __DIR__ . '/config/bootstrap.php';
 // needed here anymore either, for the same reason -- this page is opened,
 // not embedded, so the site's default `frame-ancestors 'none'` already
 // applies correctly and needs no exception.
+//
+// One header DOES need overriding, though: every page sends
+// Cross-Origin-Opener-Policy: same-origin (see SecurityHeaders.php), which
+// was always harmless for an iframe but is fatal for a popup -- COOP:
+// same-origin on a cross-origin popup's own response puts it in a fresh,
+// unrelated browsing context group, severing window.opener entirely. This
+// page's one job is to talk back to whatever window opened it, so it needs
+// the permissive default instead.
 $allowedOrigin = cfg('SAD_ALLOWED_ORIGIN') ?: '';
+header('Cross-Origin-Opener-Policy: unsafe-none');
 ?>
 <!DOCTYPE html>
 <html lang="en">
