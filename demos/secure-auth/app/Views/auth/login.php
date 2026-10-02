@@ -29,15 +29,15 @@
             <label for="password">Password</label>
             <input id="password" name="password" type="password" required>
 
-            <label for="captcha_answer" class="mt-section">Quick check: what's the answer?</label>
-            <img src="captcha.php" alt="CAPTCHA challenge" width="160" height="56" data-captcha-img class="captcha-img">
-            <button type="button" data-captcha-refresh class="action-link">New image</button>
-            <input id="captcha_answer" name="captcha_answer" type="text" inputmode="numeric" autocomplete="off" required class="mt-sm">
+            <div data-captcha-step <?= $showPasswordStep ? '' : 'hidden' ?>>
+                <label for="captcha_answer" class="mt-section">Quick check: what's the answer?</label>
+                <img alt="CAPTCHA challenge" width="160" height="56" data-captcha-img class="captcha-img">
+                <button type="button" data-captcha-refresh class="action-link">New image</button>
+                <input id="captcha_answer" name="captcha_answer" type="text" inputmode="numeric" autocomplete="off" required class="mt-sm">
+            </div>
 
             <button type="submit" class="mt-btn">Sign in</button>
         </div>
-
-        <button type="button" data-continue-btn <?= $showPasswordStep ? 'hidden' : '' ?>>Continue</button>
     </form>
 
     <p class="foot">No account yet? <a href="register.php">Create one</a></p>
@@ -46,25 +46,46 @@
 <script nonce="<?= e($nonce) ?>">
     const form = document.querySelector('[data-login-form]');
     const passwordStep = document.querySelector('[data-password-step]');
-    const continueBtn = document.querySelector('[data-continue-btn]');
+    const captchaStep = document.querySelector('[data-captcha-step]');
     const captchaImg = document.querySelector('[data-captcha-img]');
     const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
 
-    function revealPasswordStep() {
-        passwordStep.hidden = false;
-        continueBtn.hidden = true;
+    function loadCaptcha() {
         captchaImg.src = 'captcha.php?t=' + Date.now();
-        document.getElementById('password').focus();
     }
 
-    continueBtn?.addEventListener('click', () => {
-        if (!emailInput.value.trim()) { emailInput.focus(); return; }
-        revealPasswordStep();
-    });
+    // No button to click -- the password field just appears the moment the
+    // email looks like a real address, whether that's from typing, a paste,
+    // or the browser's own autofill.
+    let passwordStepShown = <?= $showPasswordStep ? 'true' : 'false' ?>;
+    function revealPasswordStep() {
+        if (passwordStepShown) return;
+        passwordStepShown = true;
+        passwordStep.hidden = false;
+        passwordInput.focus();
+    }
+    function maybeRevealPasswordStep() {
+        if (emailInput.validity.valid && emailInput.value.trim()) revealPasswordStep();
+    }
+    emailInput.addEventListener('input', maybeRevealPasswordStep);
+    emailInput.addEventListener('blur', maybeRevealPasswordStep);
 
-    document.querySelector('[data-captcha-refresh]')?.addEventListener('click', () => {
-        captchaImg.src = 'captcha.php?t=' + Date.now();
-    });
+    // The CAPTCHA itself waits for the first keystroke in the password field
+    // rather than appearing the instant the field does -- someone who gets
+    // this far and then abandons the form never even triggers an image
+    // render for a challenge they were never going to answer.
+    let captchaShown = <?= $showPasswordStep ? 'true' : 'false' ?>;
+    if (captchaShown) loadCaptcha();
+    function revealCaptcha() {
+        if (captchaShown) return;
+        captchaShown = true;
+        captchaStep.hidden = false;
+        loadCaptcha();
+    }
+    passwordInput.addEventListener('input', revealCaptcha, { once: true });
+
+    document.querySelector('[data-captcha-refresh]')?.addEventListener('click', loadCaptcha);
 
     // Best-effort: unlock the secure key for this browser/account right away, using
     // the password already in hand, so the inbox/chat pages don't need to ask again.

@@ -414,9 +414,17 @@
 
     <div class="message-overlay" data-message-overlay aria-live="polite">
         <div class="message-box">
-            <strong>Message received and encrypted.</strong>
-            <p data-overlay-note>Your message is safely stored. I'll respond personally and securely, very soon.</p>
-            <a class="button primary" data-mailto-link href="mailto:sarker.faizal2537@gmail.com">Open Email</a>
+            <div class="encrypt-anim" data-encrypt-anim aria-hidden="true">
+                <svg class="encrypt-lock" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="14" y="30" width="36" height="26" rx="6" class="encrypt-lock-body"/>
+                    <path d="M20 30V20a12 12 0 0 1 24 0v10" class="encrypt-lock-shackle" fill="none" stroke-width="4.5" stroke-linecap="round"/>
+                    <circle cx="32" cy="41" r="3.5" class="encrypt-lock-dot"/>
+                    <path d="M22 43 L29 50 L43 33" class="encrypt-check" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <strong data-overlay-title>Placing a secure request&hellip;</strong>
+            <p data-overlay-note>End-to-end encrypting your message and placing a connection request with the admin&hellip;</p>
+            <a class="button primary" data-mailto-link href="mailto:sarker.faizal2537@gmail.com" hidden>Open Email</a>
             <button type="button" data-message-close>Close</button>
         </div>
     </div>

@@ -27,7 +27,11 @@ class ProfileController
         $isMe = $targetId === $myId;
         $genderLabel = ['male' => 'Male', 'female' => 'Female', 'unspecified' => 'Prefer not to say'][$profile['gender']] ?? 'Prefer not to say';
         $initials = mb_strtoupper(mb_substr($profile['name'], 0, 1) . mb_substr($profile['username'], 0, 1));
+        // The viewer's OWN role, not the profile being looked at -- the
+        // inactivity timer exempts the admin account, whoever's profile
+        // they happen to be looking at.
+        $isAdmin = ($_SESSION['user_role'] ?? '') === 'admin';
 
-        view('profile', ['profile' => $profile, 'isMe' => $isMe, 'genderLabel' => $genderLabel, 'initials' => $initials]);
+        view('profile', ['profile' => $profile, 'isMe' => $isMe, 'genderLabel' => $genderLabel, 'initials' => $initials, 'isAdmin' => $isAdmin]);
     }
 }

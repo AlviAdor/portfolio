@@ -514,6 +514,7 @@ const IS_CROSS_ORIGIN_BACKEND = BRIDGE_ORIGIN !== location.origin;
 // Deliberately small, not display:none -- it has to actually render for its
 // own challenge-solving JS to run, which is the entire point of using one.
 let bridgePopupPromise = null;
+let overlayAutoCloseTimer = null;
 function getBridgePopup() {
     if (bridgePopupPromise) return bridgePopupPromise;
     bridgePopupPromise = new Promise((resolve) => {
@@ -648,19 +649,43 @@ form?.addEventListener("submit", (event) => {
     const bodyText = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
     mailtoLink?.setAttribute("href", `mailto:sarker.faizal2537@gmail.com?subject=${subject}&body=${bodyText}`);
 
+    const overlayTitle = document.querySelector("[data-overlay-title]");
     const overlayNote = document.querySelector("[data-overlay-note]");
+    const messageBox = overlay?.querySelector(".message-box");
     const submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.disabled = true;
 
+    // Opens right away, optimistically, rather than waiting for the result --
+    // the actual send can take a few real seconds (the popup may need to
+    // solve this host's bot challenge the first time), and a form that just
+    // sits there with no feedback for that long reads as broken, not busy.
+    if (overlayAutoCloseTimer) { clearTimeout(overlayAutoCloseTimer); overlayAutoCloseTimer = null; }
+    messageBox?.classList.remove("is-success", "is-fallback");
+    messageBox?.classList.add("is-placing");
+    if (overlayTitle) overlayTitle.textContent = "Placing a secure request…";
+    if (overlayNote) overlayNote.textContent = "End-to-end encrypting your message and placing a connection request with the admin…";
+    mailtoLink?.setAttribute("hidden", "");
+    overlay?.classList.add("is-open");
+    form.reset();
+
     sendEncryptedContactMessage(name, email, message)
         .then((encrypted) => {
-            if (overlayNote) {
-                overlayNote.textContent = encrypted
-                    ? "This message was end-to-end encrypted in your browser (RSA-OAEP + AES-256-GCM) before it ever left your device -- only the admin, signed in with their own password, can decrypt it."
-                    : "Your message is ready to send. Use the button below to email it directly.";
+            messageBox?.classList.remove("is-placing");
+            if (encrypted) {
+                messageBox?.classList.add("is-success");
+                if (overlayTitle) overlayTitle.textContent = "Request delivered.";
+                if (overlayNote) {
+                    overlayNote.textContent = "This message was end-to-end encrypted in your browser (RSA-OAEP + AES-256-GCM) before it ever left your device -- only the admin, signed in with their own password, can decrypt it.";
+                }
+                // Closes itself once the point's been made -- nothing left
+                // for the visitor to do here, unlike the fallback below.
+                overlayAutoCloseTimer = setTimeout(() => overlay?.classList.remove("is-open"), 3200);
+            } else {
+                messageBox?.classList.add("is-fallback");
+                if (overlayTitle) overlayTitle.textContent = "Message ready to send.";
+                if (overlayNote) overlayNote.textContent = "Your message is ready to send. Use the button below to email it directly.";
+                mailtoLink?.removeAttribute("hidden");
             }
-            overlay?.classList.add("is-open");
-            form.reset();
         })
         .finally(() => {
             if (submitBtn) submitBtn.disabled = false;
@@ -669,7 +694,10 @@ form?.addEventListener("submit", (event) => {
         });
 });
 
-messageClose?.addEventListener("click", () => overlay?.classList.remove("is-open"));
+messageClose?.addEventListener("click", () => {
+    overlay?.classList.remove("is-open");
+    if (overlayAutoCloseTimer) { clearTimeout(overlayAutoCloseTimer); overlayAutoCloseTimer = null; }
+});
 
 document.querySelector("[data-cookie-accept]")?.addEventListener("click", () => {
     safeStorageSet(localStorage, consentKey, "accepted");

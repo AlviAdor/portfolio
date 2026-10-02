@@ -120,6 +120,7 @@ const MY_ID = <?= json_encode((int)$_SESSION['user_id']) ?>;
 const THREAD_ID = <?= json_encode($threadId) ?>;
 const CSRF = <?= json_encode(csrf_token()) ?>;
 const ICE_SERVERS = <?= json_encode($iceServers) ?>;
+window.__SAD_IS_ADMIN = <?= $isAdmin ? 'true' : 'false' ?>;
 
 let peerPublicKey = null;
 let myPrivateKey = null;
@@ -902,5 +903,6 @@ window.addEventListener('beforeunload', () => {
     if (VoiceCall.isActive()) VoiceCall.hangup();
 });
 </script>
+<script src="assets/inactivity.js"></script>
 </body>
 </html>

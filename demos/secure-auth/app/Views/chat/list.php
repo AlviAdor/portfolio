@@ -27,6 +27,7 @@
 </main>
 
 <script nonce="<?= e(csp_nonce()) ?>">
+window.__SAD_IS_ADMIN = <?= $isAdmin ? 'true' : 'false' ?>;
 const genderLabels = { male: 'Male', female: 'Female', unspecified: 'Prefer not to say' };
 
 function initials(name, username) {
@@ -74,5 +75,6 @@ async function load() {
 }
 load();
 </script>
+<script src="assets/inactivity.js"></script>
 </body>
 </html>

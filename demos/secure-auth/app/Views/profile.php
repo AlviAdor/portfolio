@@ -29,5 +29,7 @@
         <dt>Member since</dt><dd><?= e(date('F j, Y', strtotime($profile['created_at']))) ?></dd>
     </dl>
 </main>
+<script nonce="<?= e(csp_nonce()) ?>">window.__SAD_IS_ADMIN = <?= $isAdmin ? 'true' : 'false' ?>;</script>
+<script src="assets/inactivity.js"></script>
 </body>
 </html>

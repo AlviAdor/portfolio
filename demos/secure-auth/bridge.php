@@ -48,14 +48,23 @@ header('Cross-Origin-Opener-Policy: unsafe-none');
 <script nonce="<?= e(csp_nonce()) ?>">
 const ALLOWED_ORIGIN = <?= json_encode($allowedOrigin) ?>;
 
+// credentials: 'same-origin', not 'omit' -- these two actions are public
+// and cookie-free as far as this app's own session handling is concerned
+// (see ApiController's PUBLIC_CORS_ACTIONS comment), but 'omit' turned out
+// to mean something broader than "no session cookie": it strips every
+// cookie from the request, including this host's own anti-bot verification
+// cookie, even though the request is same-origin. Without it, every fetch
+// here looked exactly like an unverified visitor to the edge layer and got
+// a JS challenge page back instead of JSON, no matter how thoroughly the
+// challenge had already been solved for this same page load.
 async function handleRequest(type, payload) {
     if (type === 'admin_public_key') {
-        const res = await fetch('api.php?action=admin_public_key', { credentials: 'omit' });
+        const res = await fetch('api.php?action=admin_public_key', { credentials: 'same-origin' });
         return res.json();
     }
     if (type === 'contact_submit') {
         const body = new URLSearchParams(payload || {});
-        const res = await fetch('api.php?action=contact_submit', { method: 'POST', body, credentials: 'omit' });
+        const res = await fetch('api.php?action=contact_submit', { method: 'POST', body, credentials: 'same-origin' });
         return res.json();
     }
     return { ok: false, error: 'Unknown bridge request type.' };

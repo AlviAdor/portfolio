@@ -30,7 +30,8 @@ class ChatController
 
         $user = User::findById((int)$_SESSION['user_id']);
         $myEmail = (string)($user['email'] ?? '');
+        $isAdmin = ($_SESSION['user_role'] ?? '') === 'admin';
 
-        view('chat/room', ['threadId' => $threadId, 'myEmail' => $myEmail, 'iceServers' => ice_servers()]);
+        view('chat/room', ['threadId' => $threadId, 'myEmail' => $myEmail, 'iceServers' => ice_servers(), 'isAdmin' => $isAdmin]);
     }
 }
