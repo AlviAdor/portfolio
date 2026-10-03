@@ -675,7 +675,7 @@ form?.addEventListener("submit", (event) => {
                 messageBox?.classList.add("is-success");
                 if (overlayTitle) overlayTitle.textContent = "Request delivered.";
                 if (overlayNote) {
-                    overlayNote.textContent = "This message was end-to-end encrypted in your browser (RSA-OAEP + AES-256-GCM) before it ever left your device -- only the admin, signed in with their own password, can decrypt it.";
+                    overlayNote.textContent = "This message was end-to-end encrypted in your browser (RSA-OAEP + AES-256-GCM) before it ever left your device. Only the admin, signed in with their own password, can decrypt it.";
                 }
                 // Closes itself once the point's been made -- nothing left
                 // for the visitor to do here, unlike the fallback below.

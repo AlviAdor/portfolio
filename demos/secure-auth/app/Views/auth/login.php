@@ -10,7 +10,7 @@
 <div class="card">
     <div class="brand"><span class="mark">SA</span> Secure Auth Demo</div>
     <h1>Sign in</h1>
-    <p class="subtitle">Rate-limited, CAPTCHA-protected, and session-hardened -- backing the claims on the Security page.</p>
+    <p class="subtitle">Rate-limited, CAPTCHA-protected, and session-hardened, backing the claims on the Security page.</p>
 
     <?php if (!empty($_GET['registered'])): ?>
         <div class="alert ok">Registered successfully. Sign in below to get started.</div>

@@ -48,7 +48,7 @@
                 <span class="gender-dot unspecified" aria-hidden="true"></span> Prefer not to say
             </label>
         </div>
-        <div class="hint">Shown as a small color marker next to your name in chat -- nowhere else.</div>
+        <div class="hint">Shown as a small color marker next to your name in chat, nowhere else.</div>
         <?php if (!empty($errors['gender'])): ?><div class="field-error"><?= e($errors['gender']) ?></div><?php endif; ?>
 
         <label for="password" class="mt-section">Password</label>

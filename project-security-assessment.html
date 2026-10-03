@@ -100,17 +100,17 @@
                 <article>
                     <span>Recon</span>
                     <h3>No prior information</h3>
-                    <p>Given nothing but an IP in an isolated virtual network, Nmap enumeration found three open ports: FTP, SSH, and HTTP -- the entire starting point for everything that followed.</p>
+                    <p>Given nothing but an IP in an isolated virtual network, Nmap enumeration found three open ports: FTP, SSH, and HTTP, which was the entire starting point for everything that followed.</p>
                 </article>
                 <article>
                     <span>Exploitation</span>
                     <h3>A real backdoor, really used</h3>
-                    <p>The FTP service identified as ProFTPD 1.3.3c, a version with a known backdoor command-execution vulnerability. Metasploit's matching module got a shell -- confirmed instantly with whoami returning root.</p>
+                    <p>The FTP service identified as ProFTPD 1.3.3c, a version with a known backdoor command-execution vulnerability. Metasploit's matching module got a shell, confirmed instantly with whoami returning root.</p>
                 </article>
                 <article>
                     <span>Evidence</span>
                     <h3>Every step captured, not claimed</h3>
-                    <p>Wireshark packet capture, exploit output, and command history are all in the report -- this is a walkthrough with proof at each step, not a plausible-sounding summary.</p>
+                    <p>Wireshark packet capture, exploit output, and command history are all in the report. This is a walkthrough with proof at each step, not a plausible-sounding summary.</p>
                 </article>
             </div>
         </section>
@@ -142,13 +142,13 @@
                         This was a course assignment with a simple premise: here's an IP address on an isolated virtual network, here's a Kali Linux attacker box, find out everything you can and see how far you can get. No hints, no prior knowledge of the target.
                     </p>
                     <p>
-                        Nmap's initial scan found three open ports -- FTP, SSH, HTTP -- and a service/version scan identified the FTP daemon as ProFTPD 1.3.3c, a version with a well-documented backdoor vulnerability (CVE-2011-4130-adjacent command execution via a crafted response). Metasploit had a matching module; running it opened a reverse shell, and whoami confirmed root access on the first attempt.
+                        Nmap's initial scan found three open ports (FTP, SSH, HTTP), and a service/version scan identified the FTP daemon as ProFTPD 1.3.3c, a version with a well-documented backdoor vulnerability (CVE-2011-4130-adjacent command execution via a crafted response). Metasploit had a matching module; running it opened a reverse shell, and whoami confirmed root access on the first attempt.
                     </p>
                     <p>
-                        From there the assessment went further than just "got a shell": packet capture with Wireshark during an FTP session recovered plaintext credentials, which led to cracking a non-system account's password to demonstrate credential reuse risk, and the final report closes with concrete remediation -- patch the outdated FTP service, apply network segmentation, and stop reusing passwords across accounts.
+                        From there the assessment went further than just "got a shell": packet capture with Wireshark during an FTP session recovered plaintext credentials, which led to cracking a non-system account's password to demonstrate credential reuse risk. The final report closes with concrete remediation: patch the outdated FTP service, apply network segmentation, and stop reusing passwords across accounts.
                     </p>
                     <p>
-                        The value of this project for me wasn't "I ran a tool and it worked" -- it was connecting the dots: recon tells you what's running, version identification tells you what's vulnerable, and exploitation only works because the first two steps were done properly. That's the mindset that shows up everywhere else in how I build and secure software now.
+                        The value of this project for me wasn't "I ran a tool and it worked," it was connecting the dots: recon tells you what's running, version identification tells you what's vulnerable, and exploitation only works because the first two steps were done properly. That's the mindset that shows up everywhere else in how I build and secure software now.
                     </p>
                     <div class="about-actions project-links">
                         <a href="https://github.com/AlviAdor/Security-Assessment-of-an-Unknown-System-in-an-Isolated-Virtual-Network" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
@@ -163,7 +163,7 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <div class="brand-mark-row"><span class="mark">AA</span> Alvi Ador</div>
-                <p>Security-first developer building verified systems -- secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
+                <p>Security-first developer building verified systems, using secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
             </div>
             <nav class="footer-nav" aria-label="Footer navigation">
                 <p class="footer-heading">Site</p>
@@ -183,7 +183,7 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Alvi Ador. All rights reserved.</p>
-            <p>Built from scratch -- HTML, CSS, and JavaScript, no framework.</p>
+            <p>Built from scratch using HTML, CSS, and JavaScript, no framework.</p>
         </div>
     </footer>
 

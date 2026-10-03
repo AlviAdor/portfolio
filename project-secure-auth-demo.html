@@ -100,7 +100,7 @@
                 <article>
                     <span>Zero-knowledge</span>
                     <h3>Encrypted contact inbox</h3>
-                    <p>Messages are RSA-OAEP + AES-256-GCM encrypted in the visitor's browser with your public key. The server stores only ciphertext -- there's no code path that could decrypt it even if I wanted to.</p>
+                    <p>Messages are RSA-OAEP + AES-256-GCM encrypted in the visitor's browser with your public key. The server stores only ciphertext. There's no code path that could decrypt it even if I wanted to.</p>
                 </article>
                 <article>
                     <span>End-to-end</span>
@@ -123,7 +123,7 @@
             <div class="screenshot-grid">
                 <figure>
                     <img src="assets/img/screens/secure-auth-register.png" alt="Secure Auth Demo registration screen">
-                    <figcaption>Registration -- generates your keypair in-browser</figcaption>
+                    <figcaption>Registration: generates your keypair in-browser</figcaption>
                 </figure>
             </div>
         </section>
@@ -135,7 +135,7 @@
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        The Security section of this site makes specific, checkable claims -- rate limiting, parameterized queries, session hardening, encrypted messaging. I got tired of security pages that just assert this stuff in prose with no way to verify it, so I built a real app to back it up instead of writing another paragraph about best practices.
+                        The Security section of this site makes specific, checkable claims: rate limiting, parameterized queries, session hardening, encrypted messaging. I got tired of security pages that just assert this stuff in prose with no way to verify it, so I built a real app to back it up instead of writing another paragraph about best practices.
                     </p>
                     <p>
                         The part I'm most proud of is the contact form: your message is encrypted in your browser with the Web Crypto API before it's ever sent, using a keypair whose private half never leaves local storage, protected by a key derived from my own login password. I can open phpMyAdmin and stare at the raw database rows and see nothing but ciphertext. It only turns back into words in my browser, after I type my password.
@@ -144,7 +144,7 @@
                         From there it extends into an actual end-to-end encrypted chat: I can invite whoever messaged me into a private conversation, and every message is encrypted client-side with a fresh key, specifically for both of us, before the server ever sees it. The server's job is just to store and relay bytes it can't read.
                     </p>
                     <p>
-                        This one is a working app, not a mockup -- you can register, log in, and use it right now using the Login link in the navigation.
+                        This one is a working app, not a mockup. You can register, log in, and use it right now using the Login link in the navigation.
                     </p>
                     <div class="about-actions project-links">
                         <a href="demos/secure-auth/register.php" target="_blank" rel="noreferrer" class="button primary">Create an Account</a>
@@ -159,7 +159,7 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <div class="brand-mark-row"><span class="mark">AA</span> Alvi Ador</div>
-                <p>Security-first developer building verified systems -- secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
+                <p>Security-first developer building verified systems: secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
             </div>
             <nav class="footer-nav" aria-label="Footer navigation">
                 <p class="footer-heading">Site</p>
@@ -179,7 +179,7 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Alvi Ador. All rights reserved.</p>
-            <p>Built from scratch -- HTML, CSS, and JavaScript, no framework.</p>
+            <p>Built from scratch: HTML, CSS, and JavaScript, no framework.</p>
         </div>
     </footer>
 

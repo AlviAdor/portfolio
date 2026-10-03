@@ -57,7 +57,7 @@
     <div class="call-top-info" data-call-top-info>
         <span class="call-peer-name" data-call-peer-name></span>
         <span class="call-timer" data-call-timer hidden>00:00</span>
-        <span class="call-encrypted-badge" data-call-encrypted-badge title="This call's audio/video never passes through any server -- it goes directly between your two browsers, encrypted the entire way.">
+        <span class="call-encrypted-badge" data-call-encrypted-badge title="This call's audio/video never passes through any server. It goes directly between your two browsers, encrypted the entire way.">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm0 2a3 3 0 0 1 3 3v3H9V7a3 3 0 0 1 3-3zm0 10a2 2 0 0 1 1 3.73V19a1 1 0 0 1-2 0v-1.27A2 2 0 0 1 12 14z" fill="currentColor"/></svg>
             End-to-end encrypted
         </span>
@@ -837,7 +837,7 @@ attachInput?.addEventListener('change', async () => {
     }
     if (file.size > MAX_ATTACHMENT_BYTES) {
         attachStatusEl.hidden = false;
-        attachStatusEl.textContent = `That file is too large -- 3MB limit (this one is ${fmtBytes(file.size)}).`;
+        attachStatusEl.textContent = `That file is too large, 3MB limit (this one is ${fmtBytes(file.size)}).`;
         setTimeout(() => { attachStatusEl.hidden = true; }, 3500);
         return;
     }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A convolutional neural network built and trained from scratch -- no pretrained backbone -- reaching 98%+ validation accuracy across three classes.">
+    <meta name="description" content="A convolutional neural network built and trained from scratch (no pretrained backbone), reaching 98%+ validation accuracy across three classes.">
     <title>CNN on a Custom Dataset | Alvi Ador</title>
     <script src="assets/js/theme-init.js"></script>
     <link rel="stylesheet" href="assets/css/styles.css">
@@ -100,12 +100,12 @@
                 <article>
                     <span>Architecture</span>
                     <h3>Built, not borrowed</h3>
-                    <p>The CNN architecture was built and trained from scratch for this assignment -- no pretrained backbone, so every weight in it was learned on this dataset specifically.</p>
+                    <p>The CNN architecture was built and trained from scratch for this assignment, with no pretrained backbone, so every weight in it was learned on this dataset specifically.</p>
                 </article>
                 <article>
                     <span>Results</span>
                     <h3>98%+ validation accuracy</h3>
-                    <p>Across three classes -- cat, dog, and wild animal faces -- the confusion matrix is close to diagonal: a small handful of misclassifications out of roughly 1,500 validation images.</p>
+                    <p>Across three classes (cat, dog, and wild animal faces), the confusion matrix is close to diagonal: a small handful of misclassifications out of roughly 1,500 validation images.</p>
                 </article>
                 <article>
                     <span>Training</span>
@@ -139,13 +139,13 @@
             <div class="about-layout">
                 <div class="about-copy">
                     <p>
-                        For a Computer Vision and Pattern Recognition midterm assignment, the brief was to build and train a CNN on a custom dataset -- in this case, an AFHQ-style set of cat, dog, and wildlife face images. The constraint that mattered: no pretrained backbone. Every convolutional filter in the network learned its weights from this dataset alone, which is a meaningfully different (and harder) exercise than fine-tuning a ResNet.
+                        For a Computer Vision and Pattern Recognition midterm assignment, the brief was to build and train a CNN on a custom dataset, in this case, an AFHQ-style set of cat, dog, and wildlife face images. The constraint that mattered: no pretrained backbone. Every convolutional filter in the network learned its weights from this dataset alone, which is a meaningfully different (and harder) exercise than fine-tuning a ResNet.
                     </p>
                     <p>
-                        The training curves are the part I actually care about more than the final accuracy number -- training and validation loss both drop and plateau together without the validation curve diverging upward, which is what tells you the model generalized rather than memorized the training set.
+                        The training curves are the part I actually care about more than the final accuracy number, since training and validation loss both drop and plateau together without the validation curve diverging upward, which is what tells you the model generalized rather than memorized the training set.
                     </p>
                     <p>
-                        The confusion matrix backs that up: of roughly 500 validation images per class, the vast majority land on the diagonal, with the "wild" category showing slightly more confusion with "dog" than the other pairs -- which tracks, since several wild species in the set have dog-like facial structure.
+                        The confusion matrix backs that up: of roughly 500 validation images per class, the vast majority land on the diagonal, with the "wild" category showing slightly more confusion with "dog" than the other pairs, which tracks, since several wild species in the set have dog-like facial structure.
                     </p>
                     <div class="about-actions project-links">
                         <a href="https://github.com/AlviAdor/CNN-Development-on-Custom-Dataset" target="_blank" rel="noreferrer" class="button secondary">View on GitHub</a>
@@ -160,7 +160,7 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <div class="brand-mark-row"><span class="mark">AA</span> Alvi Ador</div>
-                <p>Security-first developer building verified systems -- secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
+                <p>Security-first developer building verified systems, using secure PHP/MySQL, authentication, encryption, and modern web practices.</p>
             </div>
             <nav class="footer-nav" aria-label="Footer navigation">
                 <p class="footer-heading">Site</p>
@@ -180,7 +180,7 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2026 Alvi Ador. All rights reserved.</p>
-            <p>Built from scratch -- HTML, CSS, and JavaScript, no framework.</p>
+            <p>Built from scratch using HTML, CSS, and JavaScript, no framework.</p>
         </div>
     </footer>
 
